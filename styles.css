@@ -1,1 +1,70 @@
-
+body {
+  font-family: Arial, sans-serif;
+  background-image: url("https://cdn.glitch.global/1dbdb179-828e-46cf-a3b7-a9a4f8a3ee95/Capture.PNG?v=1750520464611");
+  background-repeat: repeat-x;
+  background-attachment: fixed;
+  background-color: #1d1d1d;
+  color: #dddddd;
+  padding: 20px;
+}
+h1 {
+  color: #ffffff;
+}
+#searchInput {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+#stats {
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #ffffff;
+}
+#last-updated {
+  font-size: 14px;
+  color: #aaaaaa;
+  margin-bottom: 10px;
+}
+.table-container {
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  table-layout: auto;
+}
+caption {
+  caption-side: top;
+  padding-bottom: 8px;
+  color: #cccccc;
+  font-style: italic;
+}
+th,
+td {
+  border: 1px solid #555555;
+  padding: 10px;
+  text-align: left;
+}
+th {
+  background-color: #333333;
+}
+tr:nth-child(even) {
+  background-color: #2a2a2a;
+}
+.mspt-good {
+  color: #4caf50;
+}
+.mspt-mid {
+  color: #ff9800;
+}
+.mspt-bad {
+  color: #f44336;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
