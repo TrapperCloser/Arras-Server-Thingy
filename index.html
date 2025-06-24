@@ -1,1 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arras Server Thingy</title>
+    <link
+      rel="icon"
+      href="https://cdn.glitch.global/1dbdb179-828e-46cf-a3b7-a9a4f8a3ee95/cuh.PNG?v=1750520454094"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>Arras.io Server Table (4)</h1>
+    <input type="text" id="searchInput" placeholder="Search servers..." />
 
+    <div id="stats">
+      <p>Total Players: <span id="total-players">0</span></p>
+      <p id="last-updated">Last updated: —</p>
+    </div>
+
+    <div class="table-container">
+      <table>
+        <caption>
+          Live Arras.io Server Status (updates every 5 seconds)
+        </caption>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Players</th>
+            <th>Uptime</th>
+            <th>MSPT</th>
+            <th>Region</th>
+            <th>Game Mode</th>
+            <th>Port</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody id="serverTableBody">
+          <tr>
+            <td colspan="8">Loading...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
