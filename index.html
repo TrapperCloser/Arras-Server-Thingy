@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Arras Server Thingy</title>
+    <title>Arras.io Server Monitor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link
       rel="icon"
       href="https://cdn.glitch.global/1dbdb179-828e-46cf-a3b7-a9a4f8a3ee95/cuh.PNG?v=1750520454094"
@@ -12,18 +13,61 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1>Arras.io Server Table (4)</h1>
-    <input type="text" id="searchInput" placeholder="Search servers..." />
+    <header>
+      <h1>Arras.io Server Monitor</h1>
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search by server name..."
+      />
+    </header>
+
+    <h5>Gamemode Filter</h5>
+    <div id="filters">
+      <button class="filter-btn active" data-mode="all">All</button>
+      <button class="filter-btn" data-mode="ffa">FFA</button>
+      <button class="filter-btn" data-mode="maze">Maze</button>
+      <button class="filter-btn" data-mode="siege">Siege</button>
+      <button class="filter-btn" data-mode="old dreadnoughts">Old Dreadnoughts</button>
+      <button class="filter-btn" data-mode="growth">Growth</button>
+      <button class="filter-btn" data-mode="arms race">Arms Race</button>
+      <button class="filter-btn" data-mode="2tdm">2TDM</button>
+      <button class="filter-btn" data-mode="4tdm">4TDM</button>
+      <button class="filter-btn" data-mode="sandbox">Sandbox</button>
+    </div>
+
+    <div id="row-container">
+      <div>
+        <h5>Region Filter</h5>
+        <div id="region-filters">
+          <button class="filter-btn active" data-region="all">All</button>
+          <button class="filter-btn" data-region="us central">US Central</button>
+          <button class="filter-btn" data-region="us west">US West</button>
+          <button class="filter-btn" data-region="europe">Europe</button>
+          <button class="filter-btn" data-region="asia">Asia</button>
+          <button class="filter-btn" data-region="oceania">Oceania</button>
+        </div>
+      </div>
+
+      <div>
+        <h5>Sorting</h5>
+        <div id="sorting">
+          <button class="filter-btn active" data-sorting="clients">Highest Players</button>
+          <button class="filter-btn" data-sorting="uptime">Highest Uptime</button>
+          <button class="filter-btn" data-sorting="mspt">Highest MSPT</button>
+        </div>
+      </div>
+    </div>
 
     <div id="stats">
-      <p>Total Players: <span id="total-players">0</span></p>
-      <p id="last-updated">Last updated: —</p>
+      <p><span id="total-players">Total Players: 0</span></p>
+      <span id="last-updated">Last updated: —</span>
     </div>
 
     <div class="table-container">
       <table>
         <caption>
-          Live Arras.io Server Status (updates every 5 seconds)
+          Live Server Status (updates every 3 seconds)
         </caption>
         <thead>
           <tr>
@@ -34,7 +78,6 @@
             <th>Region</th>
             <th>Game Mode</th>
             <th>Port</th>
-            <th>Type</th>
           </tr>
         </thead>
         <tbody id="serverTableBody">
@@ -44,6 +87,17 @@
         </tbody>
       </table>
     </div>
+    
+    <div id="canvas-container">
+      <canvas id="player-count-canvas" width="500" height="200"></canvas>
+    </div>
+
+    <footer>
+      <p>
+        &copy; 2025 Arras.io Monitor • Made by Trapper and Testing, inspired by Testing's
+        <a href="https://somber-basalt-stock.glitch.me/special/sandboxes3.html" id="originalLink">Sandbox Viewer 3.0</a>
+      </p>
+    </footer>
 
     <script src="script.js"></script>
   </body>
