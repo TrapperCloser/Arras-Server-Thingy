@@ -1,70 +1,294 @@
+:root {
+  --primary-color: #4a6bff;
+  --primary-dark: #3a56cc;
+  --dark-bg: #1a1a2e;
+  --darker-bg: #16213e;
+  --card-bg: rgba(26, 26, 46, 0.9);
+  --text-color: #e6e6e6;
+  --text-light: #ffffff;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --success-color: #4caf50;
+  --warning-color: #ff9800;
+  --danger-color: #f44336;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  background-image: url("https://cdn.glitch.global/1dbdb179-828e-46cf-a3b7-a9a4f8a3ee95/Capture.PNG?v=1750520464611");
-  background-repeat: repeat-x;
-  background-attachment: fixed;
-  background-color: #1d1d1d;
-  color: #dddddd;
+  font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
+  background-color: var(--dark-bg);
+  color: var(--text-color);
+  margin: 0;
   padding: 20px;
+  line-height: 1.6;
+  min-height: 100vh;
 }
+
+header {
+  text-align: center;
+  margin: 0 auto 25px;
+  background: var(--card-bg);
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 1200px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+}
+
 h1 {
-  color: #ffffff;
+  color: var(--text-light);
+  margin: 0 0 10px;
+  font-size: 2rem;
+  font-weight: 600;
 }
+
+h5 {
+  text-align: center;
+  color: var(--primary-color);
+  margin: 20px 0 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 #searchInput {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
+  max-width: 800px;
+  padding: 12px 16px;
   font-size: 16px;
+  margin: 15px auto;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: rgba(30, 30, 40, 0.8);
+  color: var(--text-color);
+  transition: all 0.2s ease;
 }
-#stats {
-  margin-bottom: 10px;
-  font-size: 18px;
-  color: #ffffff;
+
+#searchInput:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(74, 107, 255, 0.2);
 }
-#last-updated {
+
+#row-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 25px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.filter-section {
+  background: var(--card-bg);
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+  width: 100%;
+  max-width: 600px;
+}
+
+#filters,
+#sorting,
+#region-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 0;
+}
+
+.filter-btn {
+  padding: 8px 16px;
   font-size: 14px;
-  color: #aaaaaa;
-  margin-bottom: 10px;
+  background: rgba(40, 40, 60, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  font-weight: 500;
 }
+
+.filter-btn:hover {
+  background: rgba(60, 60, 80, 0.8);
+  border-color: var(--primary-color);
+}
+
+.filter-btn.active {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-dark);
+}
+
+#stats {
+  margin: 0 auto 20px;
+  font-size: 1rem;
+  color: var(--text-light);
+  text-align: center;
+  background: var(--card-bg);
+  padding: 12px;
+  border-radius: 8px;
+  max-width: 1200px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+}
+
+#last-updated {
+  font-size: 0.85rem;
+  color: #aaaaaa;
+  display: block;
+  margin-top: 5px;
+}
+
 .table-container {
   overflow-x: auto;
+  border-radius: 10px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: var(--card-bg);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+  padding: 15px;
 }
+
 table {
   width: 100%;
+  min-width: 800px;
   border-collapse: collapse;
-  margin-top: 10px;
-  table-layout: auto;
+  background-color: transparent;
 }
+
 caption {
   caption-side: top;
-  padding-bottom: 8px;
-  color: #cccccc;
+  padding: 0 0 10px;
+  color: var(--text-color);
   font-style: italic;
+  font-size: 0.9rem;
+  text-align: center;
 }
+
 th,
 td {
-  border: 1px solid #555555;
-  padding: 10px;
+  border: 1px solid var(--border-color);
+  padding: 12px 10px;
   text-align: left;
+  font-size: 14px;
 }
+
 th {
-  background-color: #333333;
+  background: rgba(45, 58, 124, 0.5);
+  color: white;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
 }
+
 tr:nth-child(even) {
-  background-color: #2a2a2a;
+  background-color: rgba(255, 255, 255, 0.03);
 }
+
+tr:hover {
+  background-color: rgba(74, 107, 255, 0.08);
+}
+
 .mspt-good {
-  color: #4caf50;
+  color: var(--success-color);
 }
+
 .mspt-mid {
-  color: #ff9800;
+  color: var(--warning-color);
 }
+
 .mspt-bad {
-  color: #f44336;
-  animation: blink 1s step-end infinite;
+  color: var(--danger-color);
+  animation: pulse 1.5s infinite;
 }
-@keyframes blink {
-  50% {
-    opacity: 0;
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+footer {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 20px 0;
+}
+
+.server-redirect {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.server-redirect:hover {
+  color: var(--text-light);
+  text-decoration: underline;
+}
+
+#canvas-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 20px auto;
+  background: var(--card-bg);
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 15px;
+  }
+  
+  header {
+    padding: 15px;
+  }
+  
+  h1 {
+    font-size: 1.6rem;
+  }
+  
+  .filter-section {
+    padding: 12px;
+  }
+  
+  .filter-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+  
+  .table-container {
+    padding: 10px;
+  }
+  
+  th, td {
+    padding: 10px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  #filters,
+  #sorting,
+  #region-filters {
+    gap: 6px;
+  }
+  
+  .filter-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  
+  th, td {
+    padding: 8px 6px;
+    font-size: 12px;
   }
 }
