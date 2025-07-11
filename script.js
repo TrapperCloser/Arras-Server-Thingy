@@ -406,9 +406,6 @@ function renderLogsToCanvas(serverName) {
   let firstXPosition, firstYPosition;
   let lastYPosition;
 
-  jsonServerLogs.forEach((logPoint) => {
-    console.log(logPoint);
-
     const timeSince = Date.now() - new Date(logPoint.timestamp).getTime();
     const xPosition = (canvas.width * (10800e3 - timeSince)) / 10800e3;
     const yPosition = canvas.height - 3 * (logPoint[serverName]?.clients || 0);
