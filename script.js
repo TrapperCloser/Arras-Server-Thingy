@@ -1,5 +1,4 @@
 const API_URL = "https://t4mebdah2ksfasgi-c.uvwx.xyz:8443/2222/status";
-  new Date(Date.now() - 10800e3).toISOString();
 
 const canvas = document.querySelector("#player-count-canvas");
 const canvasContext = canvas.getContext("2d");
@@ -12,6 +11,7 @@ const regions = {
   e: "Europe",
 };
 
+// filtered gamemodes
 const gameModes = [
   { key: "ac", label: "Arms Race Clanwars" },
   { key: "af", label: "Arms Race FFA" },
@@ -286,37 +286,11 @@ function getMsptClass(mspt) {
   return "mspt-good";
 }
 
-function logsArrayToJson(array) {
-  let allJson = [];
-  while (array.length > 0) {
-    const json = {
-      timestamp: array.shift(),
-      serverCount: array.shift(),
-    };
-    for (let index = 0; index < json.serverCount; index++) {
-      const name = array.shift();
-      const clients = array.shift();
-      const mspt = array.shift();
-      const uptime = array.shift();
-
-      json[name] = {
-        name,
-        clients,
-        mspt,
-        uptime,
-      };
-    }
-    allJson.push(json);
-  }
-  return allJson;
-}
-
 function filterTable() {
   const search = document.getElementById("searchInput").value.toLowerCase();
   const tableBody = document.getElementById("serverTableBody");
 
   let totalPlayers = 0;
-  let visibleRow = "";
 
   [...tableBody.rows].forEach((row) => {
     const name = row.getAttribute("data-name") || "";
@@ -332,99 +306,15 @@ function filterTable() {
 
     if (visible) {
       totalPlayers += parseInt(row.getAttribute("data-players")) || 0;
-      if (visibleRow === "") {
-        visibleRow = name;
-      } else {
-        visibleRow = null;
-      }
     }
   });
 
-  if (visibleRow) {
-    canvas.style.display = "";
-    renderLogsToCanvas(visibleRow);
-  } else {
-    canvas.style.display = "none";
-  }
+  canvas.style.display = "none";
 
   document.getElementById("total-players").textContent =
     (regionFilter === "all" && modeFilter === "all"
       ? "Total players: "
       : "Filtered players: ") + totalPlayers;
-}
-
-let jsonServerLogs;
-function renderLogsToCanvas(serverName) {
-  if (!jsonServerLogs) {
-    return;
-  }
-
-  canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-
-  canvasContext.strokeStyle = "#888";
-  canvasContext.fillStyle = "#888";
-  canvasContext.lineWidth = 0.5;
-
-  canvasContext.textAlign = "right";
-  canvasContext.textBaseline = "top";
-  canvasContext.font = "9px sans-serif";
-
-  const lastThirtyMinutes = Date.now() % 1800000;
-  for (let offset = lastThirtyMinutes; offset < 10800000; offset += 1800000) {
-    const time = new Date(Date.now() - offset);
-
-    const xPosition = (canvas.width * (10800e3 - offset)) / 10800e3;
-
-    canvasContext.beginPath();
-    canvasContext.moveTo(xPosition, 0);
-    canvasContext.lineTo(xPosition, canvas.height);
-    canvasContext.stroke();
-
-    canvasContext.fillText(
-      time.toLocaleTimeString({}, { hour: "numeric", minute: "2-digit" }),
-      xPosition - 2,
-      2
-    );
-  }
-
-  for (let players = 5; players < 70; players += 5) {
-    const yPosition = canvas.height - 3 * players;
-
-    canvasContext.beginPath();
-    canvasContext.moveTo(0, yPosition);
-    canvasContext.lineTo(canvas.width, yPosition);
-    canvasContext.stroke();
-
-    canvasContext.fillText(players, canvas.width - 2, yPosition + 2);
-  }
-
-  canvasContext.strokeStyle = "#08f";
-  canvasContext.fillStyle = "#08f3";
-
-  canvasContext.beginPath();
-
-  let firstXPosition, firstYPosition;
-  let lastYPosition;
-
-    const timeSince = Date.now() - new Date(logPoint.timestamp).getTime();
-    const xPosition = (canvas.width * (10800e3 - timeSince)) / 10800e3;
-    const yPosition = canvas.height - 3 * (logPoint[serverName]?.clients || 0);
-
-    canvasContext.lineTo(xPosition, yPosition);
-
-    firstXPosition ||= xPosition;
-    firstYPosition ||= yPosition;
-    lastYPosition = yPosition;
-  });
-
-  canvasContext.lineTo(-100, lastYPosition);
-  canvasContext.lineTo(-100, canvas.height + 100);
-  canvasContext.lineTo(canvas.width + 100, canvas.height + 100);
-  canvasContext.lineTo(canvas.width + 100, firstYPosition);
-  canvasContext.lineTo(firstXPosition, firstYPosition);
-
-  canvasContext.fill();
-  canvasContext.stroke();
 }
 
 async function fetchAndDisplay() {
@@ -494,6 +384,7 @@ async function fetchAndDisplay() {
   }
 }
 
+// Unified filter logic
 document.querySelectorAll(".filter-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
     if (btn.dataset.region) {
