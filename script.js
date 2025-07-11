@@ -1,5 +1,4 @@
 const API_URL = "https://t4mebdah2ksfasgi-c.uvwx.xyz:8443/2222/status";
-
 const canvas = document.querySelector("#player-count-canvas");
 const canvasContext = canvas.getContext("2d");
 
@@ -33,12 +32,20 @@ const gameModes = [
   { key: "ao4", label: "Arms Race Open 4TDM" },
   { key: "aom", label: "Arms Race Open Maze" },
   { key: "aom2", label: "Arms Race Open Maze 2TDM" },
-  { key: "aom4e", label: "Arms Race Open Maze 4 Teams Elimination" },
+  { key: "am2e", label: "Arms Race Maze 2TDM Elimination" },
+  { key: "am3e", label: "Arms Race Maze 3TDM Elimination" },
+  { key: "am4e", label: "Arms Race  Maze 4TDM Elimination" },
+  { key: "aom2e", label: "Arms Race Open Maze 2TDM Elimination" },
+  { key: "aom3e", label: "Arms Race Open Maze 3TDM Elimination" },
+  { key: "aom4e", label: "Arms Race Open Maze 4TDM Elimination" },
+  { key: "apm2", label: "Arms Race Portal Maze 2TDM" },
+  { key: "apm3", label: "Arms Race Portal Maze 3TDM" },
   { key: "apm4", label: "Arms Race Portal Maze 4TDM" },
   { key: "as", label: "Arms Race Squads" },
   { key: "ag", label: "Arms Race Growth" },
   { key: "ap", label: "Arms Race Portal" },
-  { key: "amd", label: "Armsrace Maze Duos" },
+  { key: "ad", label: "Armsrace Duos" },
+  { key: "amd", label: "Armsrace Maze Duos"},
   { key: "acropolis", label: "Assault Acropolis" },
   { key: "booster", label: "Assault Booster" },
   { key: "branches", label: "Assault Branches" },
@@ -68,7 +75,9 @@ const gameModes = [
   { key: "gom3", label: "Growth Open Maze 3TDM" },
   { key: "gom4", label: "Growth Open Maze 4TDM" },
   { key: "ga", label: "Growth Arms Race" },
+  { key: "gc", label: "Growth Clanwars" },
   { key: "gf", label: "Growth FFA" },
+  { key: "gmf", label: "Growth Maze FFA" },
   { key: "gamf", label: "Growth Armsrace Maze FFA" },
   { key: "gmd", label: "Growth Maze Duos" },
   { key: "gm2", label: "Growth Maze 2TDM" },
@@ -79,6 +88,8 @@ const gameModes = [
   { key: "go4", label: "Growth Open 4TDM" },
   { key: "grf", label: "Growth Rock FFA" },
   { key: "gs", label: "Growth Squads" },
+  { Key: "gd", label: "Growth Duos" },
+  { key: "g4", label: "Growth 4TDM" },
   { key: "gz", label: "Growth Sandbox" },
   { key: "gae5spacemf", label: "Growth Armsrace Space Maze FFA" },
   { key: "halloween", label: "Halloween (Event)" },
@@ -130,9 +141,22 @@ const gameModes = [
   { key: "overgrowtho2", label: "Overgrowth Open 2TDM" },
   { key: "overgrowtho3", label: "Overgrowth Open 3TDM" },
   { key: "overgrowtho4", label: "Overgrowth Open 4TDM" },
+  { key: "overgrowthm2", label: "Overgrowth Maze 2TDM" },
+  { key: "overgrowthm3", label: "Overgrowth Maze 3TDM" },
+  { key: "overgrowthm4", label: "Overgrowth Maze 4TDM" },
+  { key: "overgrowthom2", label: "Overgrowth Open Maze 2TDM" },
+  { key: "overgrowthom3", label: "Overgrowth Open Maze 3TDM" },
+  { key: "overgrowthom4", label: "Overgrowth Open Maze 4TDM" },
   { key: "overgrowthc", label: "Overgrowth Clanwars" },
+  { key: "overgrowths", label: "Overgrowth Squads" },
+  { key: "overgrowthd", label: "Overgrowth Duos" },
   { key: "overgrowthf", label: "Overgrowth FFA" },
+  { key: "p2", label: "Portal 2TDM" },
+  { key: "p3", label: "Portal 3TDM" },
   { key: "p4", label: "Portal 4TDM" },
+  { key: "pm2", label: "Portal Maze 2TDM" },
+  { key: "pm3", label: "Portal Maze 3TDM" },
+  { key: "pm4", label: "Portal Maze 4TDM" },
   { key: "pumpkinpatch", label: "Pumpkin Patch (Event)" },
   { key: "rf", label: "Rock FFA" },
   { key: "space2", label: "Space 2TDM" },
@@ -144,6 +168,8 @@ const gameModes = [
   { key: "spacem4", label: "Space Maze 4TDM" },
   { key: "spacemc", label: "Space Maze Clanwars" },
   { key: "spacems", label: "Space Maze Squads" },
+  { key: "spacems", label: "Space Maze Duos " },
+  { key: "spacem", label: "Space Maze" },
   { key: "spaceo2", label: "Space Open 2TDM" },
   { key: "space3", label: "Space Open 3TDM" },
   { key: "spaceo4", label: "Space Open 4TDM" },
@@ -159,7 +185,6 @@ const gameModes = [
   { key: "4", label: "4TDM" },
   { key: "4m", label: "Mothership 4TDM" },
   { key: "4d", label: "4TDM Domination" },
-  { key: "g4", label: "4TDM Growth" },
   { key: "4g", label: "4TDM Grudge Ball" },
   { key: "bastion", label: "Siege Bastion" },
   { key: "blitz", label: "Siege Blitz" },
@@ -311,10 +336,10 @@ function filterTable() {
 
   canvas.style.display = "none";
 
-  document.getElementById("total-players").textContent =
-    (regionFilter === "all" && modeFilter === "all"
+  document.getElementById("total-players").innerHTML = 
+    `<i class="fas fa-users"></i> ${(regionFilter === "all" && modeFilter === "all"
       ? "Total players: "
-      : "Filtered players: ") + totalPlayers;
+      : "Filtered players: ") + totalPlayers}`;
 }
 
 async function fetchAndDisplay() {
@@ -340,6 +365,37 @@ async function fetchAndDisplay() {
       }
     });
 
+    // Update Server Grid Visualization
+    const serverGrid = document.getElementById("server-grid");
+    serverGrid.innerHTML = "";
+
+    onlineServers.forEach((server) => {
+      const mspt = server.mspt || 0;
+      const players = server.clients || 0;
+      
+      const dot = document.createElement("div");
+      dot.className = "server-dot";
+      
+      // Determine health status
+      if (mspt >= 30) {
+        dot.classList.add("bad");
+      } else if (mspt >= 15) {
+        dot.classList.add("medium");
+      } else {
+        dot.classList.add("good");
+      }
+      
+      // Tooltip info
+      dot.setAttribute("data-tooltip", `${server.name} | ${players} players | ${mspt.toFixed(1)} mspt`);
+      
+      // Size based on player count (bigger = more players)
+      const size = 12 + Math.min(players * 2, 12);
+      dot.style.width = `${size}px`;
+      dot.style.height = `${size}px`;
+      
+      serverGrid.appendChild(dot);
+    });
+
     onlineServers.forEach((server) => {
       const row = document.createElement("tr");
       const regionCode = server.name?.[0] || "";
@@ -357,34 +413,32 @@ async function fetchAndDisplay() {
       row.innerHTML = `
         <td><a href="https://arras.io/#${
           server.name
-        }" class="server-redirect">#${server.name}</a></td>
-        <td>${server.clients} ${
+        }" class="server-redirect"><i class="fas fa-server"></i> #${server.name}</a></td>
+        <td><i class="fas fa-users"></i> ${server.clients} ${
         isOldDreadnoughts ? `(${oldDreadnoughtsPlayers} total)` : ""
       }</td>
-        <td>${formatUptime(server.uptime)}</td>
-        <td class="${msptClass}" title="Milliseconds Per Tick">${mspt} mspt</td>
-        <td>${region}</td>
-        <td title="${server.mode || server.code || "Unknown"}">${gameMode}</td>
-        <td>${server.host.split ? server.host.split("/")[1] : "?"}</td>
+        <td><i class="fas fa-clock"></i> ${formatUptime(server.uptime)}</td>
+        <td class="${msptClass}" title="Milliseconds Per Tick"><i class="fas fa-tachometer-alt"></i> ${mspt} mspt</td>
+        <td><i class="fas fa-map-marker-alt"></i> ${region}</td>
+        <td title="${server.mode || server.code || "Unknown"}"><i class="fas fa-gamepad"></i> ${gameMode}</td>
+        <td><i class="fas fa-plug"></i> ${server.host.split ? server.host.split("/")[1] : "?"}</td>
       `;
       tableBody.appendChild(row);
     });
 
-    document.getElementById("total-players").textContent =
-      (regionFilter === "all" && modeFilter === "all"
+    document.getElementById("total-players").innerHTML = 
+      `<i class="fas fa-users"></i> ${(regionFilter === "all" && modeFilter === "all"
         ? "Total players: "
-        : "Filtered players: ") + totalPlayers;
-    document.getElementById(
-      "last-updated"
-    ).textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+        : "Filtered players: ") + totalPlayers}`;
+    document.getElementById("last-updated").innerHTML = 
+      `<i class="fas fa-clock"></i> Last updated: ${new Date().toLocaleTimeString()}`;
     filterTable();
   } catch (err) {
-    tableBody.innerHTML = `<tr><td colspan="8">Error loading data</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="8"><i class="fas fa-exclamation-triangle"></i> Error loading data</td></tr>`;
     console.error("Failed to fetch server status:", err);
   }
 }
 
-// Unified filter logic
 document.querySelectorAll(".filter-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
     if (btn.dataset.region) {
@@ -416,7 +470,42 @@ document.querySelectorAll(".filter-btn").forEach((btn) => {
   });
 });
 
-document.getElementById("searchInput").addEventListener("input", filterTable);
+function toggleTheme(theme) {
+  if (theme === 'light') {
+    document.body.classList.add('light-theme');
+    document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+  } else if (theme === 'dark') {
+    document.body.classList.remove('light-theme');
+    document.getElementById('themeToggle').innerHTML = '<i class="fas fa-moon"></i>';
+  } else {
+    // Toggle based on current state
+    if (document.body.classList.contains('light-theme')) {
+      document.body.classList.remove('light-theme');
+      document.getElementById('themeToggle').innerHTML = '<i class="fas fa-moon"></i>';
+    } else {
+      document.body.classList.add('light-theme');
+      document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+    }
+  }
+}
+
+document.getElementById("searchInput").addEventListener("input", function(e) {
+  if (e.target.value.toLowerCase() === "$toggle-light") {
+    toggleTheme('light');
+    e.target.value = "";
+    filterTable();
+  } else if (e.target.value.toLowerCase() === "$toggle-dark") {
+    toggleTheme('dark');
+    e.target.value = "";
+    filterTable();
+  } else {
+    filterTable();
+  }
+});
+
+document.getElementById('themeToggle').addEventListener('click', function() {
+  toggleTheme();
+});
 
 fetchAndDisplay();
 setInterval(fetchAndDisplay, 3000);
