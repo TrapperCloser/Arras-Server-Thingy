@@ -209,7 +209,6 @@ h5 i {
   margin-top: 8px;
 }
 
-/* Server Grid Visualization */
 #server-grid-container {
   max-width: 1200px;
   margin: 0 auto 25px;
@@ -266,7 +265,6 @@ h5 i {
   opacity: 1;
 }
 
-/* Server health states */
 .server-dot.good {
   background: var(--success-color);
   animation: pulse-green 2s infinite;
