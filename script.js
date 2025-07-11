@@ -88,7 +88,7 @@ const gameModes = [
   { key: "go4", label: "Growth Open 4TDM" },
   { key: "grf", label: "Growth Rock FFA" },
   { key: "gs", label: "Growth Squads" },
-  { Key: "gd", label: "Growth Duos" },
+  { key: "gd", label: "Growth Duos" },
   { key: "g4", label: "Growth 4TDM" },
   { key: "gz", label: "Growth Sandbox" },
   { key: "gae5spacemf", label: "Growth Armsrace Space Maze FFA" },
@@ -346,16 +346,34 @@ async function fetchAndDisplay() {
   const tableBody = document.getElementById("serverTableBody");
   try {
     const resServers = await fetch(API_URL);
+    if (!resServers.ok) {
+      throw new Error(`HTTP error! status: ${resServers.status}`);
+    }
     const jsonServers = await resServers.json();
 
-    const onlineServers = Object.values(jsonServers.status || {});
+    // Safely get online servers array
+    const onlineServers = jsonServers && jsonServers.status 
+      ? Object.values(jsonServers.status).filter(server => server) 
+      : [];
+    
     let totalPlayers = 0;
     let oldDreadnoughtsPlayers = 0;
 
     tableBody.innerHTML = "";
-    onlineServers.sort((a, b) => b[currentSorting] - a[currentSorting]);
+    
+    // Safe sorting with fallback values
+    if (onlineServers && onlineServers.length) {
+      onlineServers.sort((a, b) => {
+        const aValue = a[currentSorting] || 0;
+        const bValue = b[currentSorting] || 0;
+        return bValue - aValue;
+      });
+    }
 
+    // Calculate totals
     onlineServers.forEach((server) => {
+      if (!server) return;
+      
       const modeRaw = [server.mode, server.code].filter(Boolean).join(" ");
       const gameMode = extractGameModeFromCode(modeRaw);
 
@@ -370,6 +388,8 @@ async function fetchAndDisplay() {
     serverGrid.innerHTML = "";
 
     onlineServers.forEach((server) => {
+      if (!server) return;
+      
       const mspt = server.mspt || 0;
       const players = server.clients || 0;
       
@@ -386,7 +406,7 @@ async function fetchAndDisplay() {
       }
       
       // Tooltip info
-      dot.setAttribute("data-tooltip", `${server.name} | ${players} players | ${mspt.toFixed(1)} mspt`);
+      dot.setAttribute("data-tooltip", `${server.name || 'Unknown'} | ${players} players | ${mspt.toFixed(1)} mspt`);
       
       // Size based on player count (bigger = more players)
       const size = 12 + Math.min(players * 2, 12);
@@ -396,7 +416,10 @@ async function fetchAndDisplay() {
       serverGrid.appendChild(dot);
     });
 
+    // Create table rows
     onlineServers.forEach((server) => {
+      if (!server) return;
+      
       const row = document.createElement("tr");
       const regionCode = server.name?.[0] || "";
       const region = regions[regionCode] || "Unknown";
@@ -406,22 +429,22 @@ async function fetchAndDisplay() {
       const gameMode = extractGameModeFromCode(modeRaw);
       const isOldDreadnoughts = gameMode.match("Old Dreadnoughts");
 
-      row.setAttribute("data-name", server.name.toLowerCase());
+      row.setAttribute("data-name", (server.name || '').toLowerCase());
       row.setAttribute("data-mode", gameMode.toLowerCase());
       row.setAttribute("data-region", region.toLowerCase());
-      row.setAttribute("data-players", server.clients);
+      row.setAttribute("data-players", server.clients || 0);
       row.innerHTML = `
         <td><a href="https://arras.io/#${
-          server.name
-        }" class="server-redirect"><i class="fas fa-server"></i> #${server.name}</a></td>
-        <td><i class="fas fa-users"></i> ${server.clients} ${
+          server.name || ''
+        }" class="server-redirect"><i class="fas fa-server"></i> #${server.name || '?'}</a></td>
+        <td><i class="fas fa-users"></i> ${server.clients || 0} ${
         isOldDreadnoughts ? `(${oldDreadnoughtsPlayers} total)` : ""
       }</td>
-        <td><i class="fas fa-clock"></i> ${formatUptime(server.uptime)}</td>
+        <td><i class="fas fa-clock"></i> ${formatUptime(server.uptime || 0)}</td>
         <td class="${msptClass}" title="Milliseconds Per Tick"><i class="fas fa-tachometer-alt"></i> ${mspt} mspt</td>
         <td><i class="fas fa-map-marker-alt"></i> ${region}</td>
         <td title="${server.mode || server.code || "Unknown"}"><i class="fas fa-gamepad"></i> ${gameMode}</td>
-        <td><i class="fas fa-plug"></i> ${server.host.split ? server.host.split("/")[1] : "?"}</td>
+        <td><i class="fas fa-plug"></i> ${server.host && server.host.split ? server.host.split("/")[1] : "?"}</td>
       `;
       tableBody.appendChild(row);
     });
@@ -434,7 +457,7 @@ async function fetchAndDisplay() {
       `<i class="fas fa-clock"></i> Last updated: ${new Date().toLocaleTimeString()}`;
     filterTable();
   } catch (err) {
-    tableBody.innerHTML = `<tr><td colspan="8"><i class="fas fa-exclamation-triangle"></i> Error loading data</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="8"><i class="fas fa-exclamation-triangle"></i> Error loading data: ${err.message}</td></tr>`;
     console.error("Failed to fetch server status:", err);
   }
 }
@@ -507,5 +530,6 @@ document.getElementById('themeToggle').addEventListener('click', function() {
   toggleTheme();
 });
 
+// Initial load
 fetchAndDisplay();
 setInterval(fetchAndDisplay, 3000);
