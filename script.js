@@ -436,11 +436,6 @@ async function fetchAndDisplay() {
     const resServers = await fetch(API_URL);
     const jsonServers = await resServers.json();
 
-    const resServerLogs = await fetch(LOGS_URL());
-    const arrayServerLogs = await resServerLogs.json();
-
-    jsonServerLogs = logsArrayToJson(arrayServerLogs);
-
     const onlineServers = Object.values(jsonServers.status || {});
     let totalPlayers = 0;
     let oldDreadnoughtsPlayers = 0;
