@@ -38,7 +38,7 @@ const gameModes = [
   { key: "as", label: "Arms Race Squads" },
   { key: "ag", label: "Arms Race Growth" },
   { key: "ap", label: "Arms Race Portal" },
-  { key: "amd", label: "Armsrace Maze Duos"},
+  { key: "amd", label: "Armsrace Maze Duos" },
   { key: "acropolis", label: "Assault Acropolis" },
   { key: "booster", label: "Assault Booster" },
   { key: "branches", label: "Assault Branches" },
