@@ -128,7 +128,7 @@ const gameModes = [
   { key: "classic2", label: "Classic 2TDM" },
   { key: "classic3", label: "Classic 3TDM" },
   { key: "classic4", label: "Classic 4TDM" },
-  { key: "yins4yang", label: "Maze Yins 4 Yang" },
+  { key: "yins4yang", label: "YinYang" },
   { key: "test", label: "Testing" },
   { key: "nexus", label: "Nexus" },
   { key: "o2", label: "Open 2TDM" },
