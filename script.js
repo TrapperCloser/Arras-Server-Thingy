@@ -10,8 +10,18 @@ const regions = {
   e: "Europe",
 };
 
-// filtered gamemodes
 const gameModes = [
+  // Server instances (added these first)
+  { key: "e0", label: "Sandbox Redirect" },
+  { key: "e1", label: "Server Instance 1" },
+  { key: "e2", label: "Server Instance 2" },
+  { key: "e3", label: "Server Instance 3" },
+  { key: "e4", label: "Server Instance 4" },
+  { key: "e5", label: "Server Instance 5" },
+  { key: "e6", label: "Server Instance 6" },
+  { key: "e7", label: "Server Instance 7" },
+  { key: "e8", label: "Server Instance 8" },
+  { key: "e9", label: "Server Instance 9" },
   { key: "ac", label: "Arms Race Clanwars" },
   { key: "af", label: "Arms Race FFA" },
   { key: "am", label: "Arms Race Maze" },
@@ -100,21 +110,6 @@ const gameModes = [
   { key: "g4", label: "Growth 4TDM" },
   { key: "gz", label: "Growth Sandbox" },
   { key: "gae5spacemf", label: "Growth Armsrace Space Maze FFA" },
-  { key:"ge5classic2", label: "Growth Classic 2TDM" },
-  { key:"ge6classic2", label: "Growth Classic 2TDM" },
-  { key:"ge7classic2", label: "Growth Classic 2TDM" },
-  { key:"ge8classic2", label: "Growth Classic 2TDM" },
-  { key:"ge9classic2", label: "Growth Classic 2TDM" },
-  { key:"ge5classic4", label: "Growth Classic 3TDM" },
-  { key:"ge6classic4", label: "Growth Classic 3TDM" },
-  { key:"ge7classic4", label: "Growth Classic 3TDM" },
-  { key:"ge8classic4", label: "Growth Classic 3TDM" },
-  { key:"ge9classic4", label: "Growth Classic 3TDM" },
-  { key:"ge5classic4", label: "Growth Classic 4TDM" },
-  { key:"ge6classic4", label: "Growth Classic 4TDM" },
-  { key:"ge7classic4", label: "Growth Classic 4TDM" },
-  { key:"ge8classic4", label: "Growth Classic 4TDM" },
-  { key:"ge9classic4", label: "Growth Classic 4TDM" },
   { key: "halloween", label: "Halloween (Event)" },
   { key: "labyrinth", label: "Greedyrinth (Labyrinth)" },
   { key: "limbo", label: "Limbo" },
@@ -224,7 +219,16 @@ const gameModes = [
   { key: "w33oldscdreadnoughtso4", label: "Old Dreadnoughts Open 4TDM" },
 ];
 
-const sortedModes = [...gameModes].sort((a, b) => b.key.length - a.key.length);
+const sortedModes = [...gameModes].sort((a, b) => {
+  const aIsInstance = a.key.match(/^e[0-9]$/);
+  const bIsInstance = b.key.match(/^e[0-9]$/);
+  
+  if (aIsInstance && !bIsInstance) return -1;
+  if (!aIsInstance && bIsInstance) return 1;
+  
+  return b.key.length - a.key.length;
+});
+
 const unknownLogged = new Set();
 
 let regionFilter = "all";
@@ -243,6 +247,27 @@ function extractGameModeFromCode(code = "") {
     if (lower === mode.key.toLowerCase()) return mode.label;
   }
 
+  const serverInstanceMatch = lower.match(/^(e[0-9])([a-z0-9]+)/i);
+  if (serverInstanceMatch) {
+    const [_, instance, modeCode] = serverInstanceMatch;
+    
+    const instanceLabel = gameModes.find(m => m.key.toLowerCase() === instance)?.label || instance;
+    
+    for (const mode of sortedModes) {
+      if (modeCode === mode.key.toLowerCase()) {
+        return `${instanceLabel} ${mode.label}`;
+      }
+    }
+    
+    const parsedMode = extractGameModeFromCode(modeCode);
+    if (parsedMode !== "Unknown") {
+      return `${instanceLabel} ${parsedMode}`;
+    }
+    
+    return `${instanceLabel} Server`;
+  }
+
+  // Check for tokens split by non-alphanumeric characters
   const tokens = lower.split(/[^a-z0-9]+/i);
   for (const token of tokens) {
     for (const mode of sortedModes) {
@@ -263,6 +288,7 @@ function extractGameModeFromCode(code = "") {
     p: "Portal",
     o: "Open",
     m: "Maze",
+    e: "Instance"
   };
   const teamMap = {
     f: "FFA",
@@ -305,6 +331,7 @@ function extractGameModeFromCode(code = "") {
 
   const dynamicLabel = [...mods, team, win].filter(Boolean).join(" ");
 
+  // Final fallback - look for any mode key substring
   const fallbackMatch = sortedModes.find((m) =>
     lower.includes(m.key.toLowerCase())
   );
@@ -374,7 +401,6 @@ async function fetchAndDisplay() {
     }
     const jsonServers = await resServers.json();
 
-    // Safely get online servers array
     const onlineServers = jsonServers && jsonServers.status 
       ? Object.values(jsonServers.status).filter(server => server) 
       : [];
@@ -384,7 +410,6 @@ async function fetchAndDisplay() {
 
     tableBody.innerHTML = "";
     
-    // Safe sorting with fallback values
     if (onlineServers && onlineServers.length) {
       onlineServers.sort((a, b) => {
         const aValue = a[currentSorting] || 0;
@@ -393,7 +418,6 @@ async function fetchAndDisplay() {
       });
     }
 
-    // Calculate totals
     onlineServers.forEach((server) => {
       if (!server) return;
       
@@ -406,7 +430,6 @@ async function fetchAndDisplay() {
       }
     });
 
-    // Update Server Grid Visualization
     const serverGrid = document.getElementById("server-grid");
     serverGrid.innerHTML = "";
 
@@ -428,7 +451,6 @@ async function fetchAndDisplay() {
         dot.classList.add("good");
       }
       
-      // Tooltip info
       dot.setAttribute("data-tooltip", `${server.name || 'Unknown'} | ${players} players | ${mspt.toFixed(1)} mspt`);
       
       // Size based on player count (bigger = more players)
@@ -439,7 +461,6 @@ async function fetchAndDisplay() {
       serverGrid.appendChild(dot);
     });
 
-    // Create table rows
     onlineServers.forEach((server) => {
       if (!server) return;
       
@@ -553,6 +574,5 @@ document.getElementById('themeToggle').addEventListener('click', function() {
   toggleTheme();
 });
 
-// Initial load
 fetchAndDisplay();
 setInterval(fetchAndDisplay, 3000);
