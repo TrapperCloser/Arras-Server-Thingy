@@ -191,6 +191,7 @@ const gameModes = [
   { key: "spaceo2", label: "Space Open 2TDM" },
   { key: "space3", label: "Space Open 3TDM" },
   { key: "spaceo4", label: "Space Open 4TDM" },
+  { key: "tetromino", label: "Tetromino" },
   { key: "s", label: "Squads" },
   { key: "t", label: "Tag" },
   { key: "z", label: "Sandbox" },
@@ -229,105 +230,80 @@ const sortedModes = [...gameModes].sort((a, b) => {
   return b.key.length - a.key.length;
 });
 
-const unknownLogged = new Set();
-
-let regionFilter = "all";
-let modeFilter = "all";
-let currentSorting = "clients";
-
-window.dumpUnknownModes = () => {
-  console.log("[Unknown Modes]", [...unknownLogged]);
-};
-
 function extractGameModeFromCode(code = "") {
   if (!code || typeof code !== "string") return "Unknown";
   const lower = code.toLowerCase();
 
-  const exactMatch = sortedModes.find(mode => lower === mode.key.toLowerCase());
+  const exactMatch = sortedModes.find(m => lower === m.key.toLowerCase());
   if (exactMatch) return exactMatch.label;
 
-  const serverInstanceMatch = lower.match(/^(e[0-9])([a-z0-9]+)/i);
-  if (serverInstanceMatch) {
-    const [_, instance, modeCode] = serverInstanceMatch;
-
-    const instanceLabel = gameModes.find(m => m.key.toLowerCase() === instance)?.label || `Server ${instance.toUpperCase()}`;
-
-    const modeMatch = sortedModes.find(mode => modeCode === mode.key.toLowerCase());
+  const instanceMatch = lower.match(/^(e[0-9])(.*)/);
+  if (instanceMatch) {
+    const [_, instanceCode, modeCode] = instanceMatch;
+    const instanceLabel = gameModes.find(m => m.key.toLowerCase() === instanceCode)?.label || `Instance ${instanceCode[1]}`;
+    
+    if (!modeCode) return instanceLabel;
+    
+    const modeMatch = sortedModes.find(m => 
+      modeCode === m.key.toLowerCase() || 
+      modeCode.startsWith(m.key.toLowerCase())
+    );
+    
     if (modeMatch) {
-      return `${instanceLabel}: ${modeMatch.label}`;
+      return `${instanceLabel} (${modeMatch.label})`;
     }
-
-    for (const mode of sortedModes) {
-      if (modeCode.includes(mode.key.toLowerCase())) {
-        return `${instanceLabel}: ${mode.label}`;
-      }
+    
+    // Try to parse the mode code character by character
+    const parsedMode = parseModeCode(modeCode);
+    if (parsedMode) {
+      return `${instanceLabel} (${parsedMode})`;
     }
-
-    return instanceLabel;
+    
+    return `${instanceLabel} (Unknown Mode)`; 
   }
 
-  const tokens = lower.split(/[^a-z0-9]+/i);
-  for (const token of tokens) {
-    const tokenMatch = sortedModes.find(mode => token === mode.key.toLowerCase());
-    if (tokenMatch) return tokenMatch.label;
-  }
+  const parsedMode = parseModeCode(lower);
+  if (parsedMode) return parsedMode;
+
+  return "Unknown";
+}
+
+function parseModeCode(code) {
+
+  const exactMatch = sortedModes.find(m => code === m.key.toLowerCase());
+  if (exactMatch) return exactMatch.label;
 
   for (const mode of sortedModes) {
-    const regex = new RegExp(
-      `(?:^|[^a-z0-9])${mode.key.toLowerCase()}(?:[^a-z0-9]|$)`
-    );
-    if (regex.test(lower)) return mode.label;
+    if (code.includes(mode.key.toLowerCase())) {
+      return mode.label;
+    }
   }
 
   const modifierMap = {
-    g: "Growth",
-    a: "Arms Race",
-    p: "Portal",
-    o: "Open",
-    m: "Maze",
-    e: "Instance"
+    g: "Growth", a: "Arms Race", p: "Portal", o: "Open", m: "Maze"
   };
   const teamMap = {
-    f: "FFA",
-    d: "Duos",
-    s: "Squads",
-    c: "Clan Wars",
-    1: "1TDM",
-    2: "2TDM",
-    3: "3TDM",
-    4: "4TDM",
+    f: "FFA", d: "Duos", s: "Squads", c: "Clan Wars",
+    1: "1TDM", 2: "2TDM", 3: "3TDM", 4: "4TDM"
   };
   const winMap = {
-    d: "Domination",
-    m: "Mothership",
-    a: "Assault",
-    s: "Siege",
-    t: "Tag",
-    p: "Pandemic",
-    b: "Soccer",
-    g: "Grudge Ball",
-    e: "Elimination",
-    c: "Capture the Flag",
-    z: "Sandbox",
+    d: "Domination", m: "Mothership", a: "Assault",
+    t: "Tag", c: "CTF", z: "Sandbox"
   };
 
-  const chars = lower.replace(/[^a-z0-9]/gi, "").split("");
+  const chars = code.replace(/[^a-z0-9]/gi, "").split("");
   const mods = [];
   let team = null;
   let win = null;
 
   for (const char of chars) {
-    if (!team && teamMap[char]) {
-      team = teamMap[char];
-    } else if (!win && winMap[char]) {
-      win = winMap[char];
-    } else if (modifierMap[char] && !mods.includes(modifierMap[char])) {
-      mods.push(modifierMap[char]);
-    }
+    if (!team && teamMap[char]) team = teamMap[char];
+    else if (!win && winMap[char]) win = winMap[char];
+    else if (modifierMap[char]) mods.push(modifierMap[char]);
   }
 
-  const dynamicLabel = [...mods, team, win].filter(Boolean).join(" ");
-
+  return [...mods, team, win].filter(Boolean).join(" ") || null;
+}
   const fallbackMatch = sortedModes.find((m) =>
     lower.includes(m.key.toLowerCase())
   );
