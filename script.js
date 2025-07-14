@@ -243,36 +243,33 @@ function extractGameModeFromCode(code = "") {
   if (!code || typeof code !== "string") return "Unknown";
   const lower = code.toLowerCase();
 
-  for (const mode of sortedModes) {
-    if (lower === mode.key.toLowerCase()) return mode.label;
-  }
+  const exactMatch = sortedModes.find(mode => lower === mode.key.toLowerCase());
+  if (exactMatch) return exactMatch.label;
 
   const serverInstanceMatch = lower.match(/^(e[0-9])([a-z0-9]+)/i);
   if (serverInstanceMatch) {
     const [_, instance, modeCode] = serverInstanceMatch;
-    
-    const instanceLabel = gameModes.find(m => m.key.toLowerCase() === instance)?.label || instance;
-    
+
+    const instanceLabel = gameModes.find(m => m.key.toLowerCase() === instance)?.label || `Server ${instance.toUpperCase()}`;
+
+    const modeMatch = sortedModes.find(mode => modeCode === mode.key.toLowerCase());
+    if (modeMatch) {
+      return `${instanceLabel}: ${modeMatch.label}`;
+    }
+
     for (const mode of sortedModes) {
-      if (modeCode === mode.key.toLowerCase()) {
-        return `${instanceLabel} ${mode.label}`;
+      if (modeCode.includes(mode.key.toLowerCase())) {
+        return `${instanceLabel}: ${mode.label}`;
       }
     }
-    
-    const parsedMode = extractGameModeFromCode(modeCode);
-    if (parsedMode !== "Unknown") {
-      return `${instanceLabel} ${parsedMode}`;
-    }
-    
-    return `${instanceLabel} Server`;
+
+    return instanceLabel;
   }
 
-  // Check for tokens split by non-alphanumeric characters
   const tokens = lower.split(/[^a-z0-9]+/i);
   for (const token of tokens) {
-    for (const mode of sortedModes) {
-      if (token === mode.key.toLowerCase()) return mode.label;
-    }
+    const tokenMatch = sortedModes.find(mode => token === mode.key.toLowerCase());
+    if (tokenMatch) return tokenMatch.label;
   }
 
   for (const mode of sortedModes) {
@@ -331,7 +328,6 @@ function extractGameModeFromCode(code = "") {
 
   const dynamicLabel = [...mods, team, win].filter(Boolean).join(" ");
 
-  // Final fallback - look for any mode key substring
   const fallbackMatch = sortedModes.find((m) =>
     lower.includes(m.key.toLowerCase())
   );
