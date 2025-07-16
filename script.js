@@ -11,7 +11,6 @@ const regions = {
 };
 
 const gameModes = [
-  // Server instances (added these first)
   { key: "e0", label: "Sandbox Redirect" },
   { key: "e1", label: "Server Instance 1" },
   { key: "e2", label: "Server Instance 2" },
