@@ -230,6 +230,8 @@ const sortedModes = [...gameModes].sort((a, b) => {
   return b.key.length - a.key.length;
 });
 
+const unknownLogged = new Set();
+
 function extractGameModeFromCode(code = "") {
   if (!code || typeof code !== "string") return "Unknown";
   const lower = code.toLowerCase();
@@ -237,13 +239,14 @@ function extractGameModeFromCode(code = "") {
   const exactMatch = sortedModes.find(m => lower === m.key.toLowerCase());
   if (exactMatch) return exactMatch.label;
 
+  // Handle server instance prefixes (e0-e9)
   const instanceMatch = lower.match(/^(e[0-9])(.*)/);
   if (instanceMatch) {
     const [_, instanceCode, modeCode] = instanceMatch;
     const instanceLabel = gameModes.find(m => m.key.toLowerCase() === instanceCode)?.label || `Instance ${instanceCode[1]}`;
     
     if (!modeCode) return instanceLabel;
-    
+
     const modeMatch = sortedModes.find(m => 
       modeCode === m.key.toLowerCase() || 
       modeCode.startsWith(m.key.toLowerCase())
@@ -261,7 +264,7 @@ function extractGameModeFromCode(code = "") {
     
     return `${instanceLabel} (Unknown Mode)`; 
   }
-
+  
   const parsedMode = parseModeCode(lower);
   if (parsedMode) return parsedMode;
 
