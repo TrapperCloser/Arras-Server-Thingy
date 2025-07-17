@@ -238,7 +238,6 @@ function extractGameModeFromCode(code = "") {
   const exactMatch = sortedModes.find(m => lower === m.key.toLowerCase());
   if (exactMatch) return exactMatch.label;
 
-  // Handle server instance prefixes (e0-e9)
   const instanceMatch = lower.match(/^(e[0-9])(.*)/);
   if (instanceMatch) {
     const [_, instanceCode, modeCode] = instanceMatch;
