@@ -1,4 +1,8 @@
 const API_URL = "https://t4mebdah2ksfasgi-c.uvwx.xyz:8443/2222/status";
+const LOGS_URL = () =>
+  "https://verify-dev.glitch.me/api/server-data/array?timestamp=" +
+  new Date(Date.now() - 10800e3).toISOString();
+
 const canvas = document.querySelector("#player-count-canvas");
 const canvasContext = canvas.getContext("2d");
 
@@ -10,6 +14,7 @@ const regions = {
   e: "Europe",
 };
 
+// filtered gamemodes
 const gameModes = [
   { key: "ac", label: "Arms Race Clanwars" },
   { key: "af", label: "Arms Race FFA" },
@@ -31,19 +36,11 @@ const gameModes = [
   { key: "ao4", label: "Arms Race Open 4TDM" },
   { key: "aom", label: "Arms Race Open Maze" },
   { key: "aom2", label: "Arms Race Open Maze 2TDM" },
-  { key: "am2e", label: "Arms Race Maze 2TDM Elimination" },
-  { key: "am3e", label: "Arms Race Maze 3TDM Elimination" },
-  { key: "am4e", label: "Arms Race Maze 4TDM Elimination" },
-  { key: "aom2e", label: "Arms Race Open Maze 2TDM Elimination" },
-  { key: "aom3e", label: "Arms Race Open Maze 3TDM Elimination" },
-  { key: "aom4e", label: "Arms Race Open Maze 4TDM Elimination" },
-  { key: "apm2", label: "Arms Race Portal Maze 2TDM" },
-  { key: "apm3", label: "Arms Race Portal Maze 3TDM" },
+  { key: "aom4e", label: "Arms Race Open Maze 4 Teams Elimination" },
   { key: "apm4", label: "Arms Race Portal Maze 4TDM" },
   { key: "as", label: "Arms Race Squads" },
   { key: "ag", label: "Arms Race Growth" },
   { key: "ap", label: "Arms Race Portal" },
-  { key: "ad", label: "Armsrace Duos" },
   { key: "amd", label: "Armsrace Maze Duos"},
   { key: "acropolis", label: "Assault Acropolis" },
   { key: "booster", label: "Assault Booster" },
@@ -74,14 +71,8 @@ const gameModes = [
   { key: "gom3", label: "Growth Open Maze 3TDM" },
   { key: "gom4", label: "Growth Open Maze 4TDM" },
   { key: "ga", label: "Growth Arms Race" },
-  { key: "gc", label: "Growth Clanwars" },
   { key: "gf", label: "Growth FFA" },
-  { key: "gmf", label: "Growth Maze FFA" },
   { key: "gamf", label: "Growth Armsrace Maze FFA" },
-  { key: "gamc", label: "Growth Armsrace Maze Clanwars" },
-  { key: "gams", label: "Growth Armsrace Maze Squads" },
-  { key: "gamd", label: "Growth Armsrace Maze Duos" },
-  { key: "gamp", label: "Growth Armsrace Maze Portal" },
   { key: "gmd", label: "Growth Maze Duos" },
   { key: "gm2", label: "Growth Maze 2TDM" },
   { key: "gm3", label: "Growth Maze 3TDM" },
@@ -90,13 +81,7 @@ const gameModes = [
   { key: "go3", label: "Growth Open 3TDM" },
   { key: "go4", label: "Growth Open 4TDM" },
   { key: "grf", label: "Growth Rock FFA" },
-  { key: "gmc", label: "Growth Maze Clanwars" },
-  { key: "gms", label: "Growth Maze Squads" },
-  { key: "gmd", label: "Growth Maze Duos" },
-  { key: "gmp", label: "Growth Maze Portal" },
   { key: "gs", label: "Growth Squads" },
-  { key: "gd", label: "Growth Duos" },
-  { key: "g4", label: "Growth 4TDM" },
   { key: "gz", label: "Growth Sandbox" },
   { key: "gae5spacemf", label: "Growth Armsrace Space Maze FFA" },
   { key: "halloween", label: "Halloween (Event)" },
@@ -127,7 +112,7 @@ const gameModes = [
   { key: "classic2", label: "Classic 2TDM" },
   { key: "classic3", label: "Classic 3TDM" },
   { key: "classic4", label: "Classic 4TDM" },
-  { key: "yins4yang", label: "YinYang" },
+  { key: "yins4yang", label: "Maze Yins 4 Yang" },
   { key: "test", label: "Testing" },
   { key: "nexus", label: "Nexus" },
   { key: "o2", label: "Open 2TDM" },
@@ -148,22 +133,9 @@ const gameModes = [
   { key: "overgrowtho2", label: "Overgrowth Open 2TDM" },
   { key: "overgrowtho3", label: "Overgrowth Open 3TDM" },
   { key: "overgrowtho4", label: "Overgrowth Open 4TDM" },
-  { key: "overgrowthm2", label: "Overgrowth Maze 2TDM" },
-  { key: "overgrowthm3", label: "Overgrowth Maze 3TDM" },
-  { key: "overgrowthm4", label: "Overgrowth Maze 4TDM" },
-  { key: "overgrowthom2", label: "Overgrowth Open Maze 2TDM" },
-  { key: "overgrowthom3", label: "Overgrowth Open Maze 3TDM" },
-  { key: "overgrowthom4", label: "Overgrowth Open Maze 4TDM" },
   { key: "overgrowthc", label: "Overgrowth Clanwars" },
-  { key: "overgrowths", label: "Overgrowth Squads" },
-  { key: "overgrowthd", label: "Overgrowth Duos" },
   { key: "overgrowthf", label: "Overgrowth FFA" },
-  { key: "p2", label: "Portal 2TDM" },
-  { key: "p3", label: "Portal 3TDM" },
   { key: "p4", label: "Portal 4TDM" },
-  { key: "pm2", label: "Portal Maze 2TDM" },
-  { key: "pm3", label: "Portal Maze 3TDM" },
-  { key: "pm4", label: "Portal Maze 4TDM" },
   { key: "pumpkinpatch", label: "Pumpkin Patch (Event)" },
   { key: "rf", label: "Rock FFA" },
   { key: "space2", label: "Space 2TDM" },
@@ -175,12 +147,9 @@ const gameModes = [
   { key: "spacem4", label: "Space Maze 4TDM" },
   { key: "spacemc", label: "Space Maze Clanwars" },
   { key: "spacems", label: "Space Maze Squads" },
-  { key: "spacems", label: "Space Maze Duos " },
-  { key: "spacem", label: "Space Maze" },
   { key: "spaceo2", label: "Space Open 2TDM" },
   { key: "space3", label: "Space Open 3TDM" },
   { key: "spaceo4", label: "Space Open 4TDM" },
-  { key: "tetromino", label: "Tetromino" },
   { key: "s", label: "Squads" },
   { key: "t", label: "Tag" },
   { key: "z", label: "Sandbox" },
@@ -193,6 +162,7 @@ const gameModes = [
   { key: "4", label: "4TDM" },
   { key: "4m", label: "Mothership 4TDM" },
   { key: "4d", label: "4TDM Domination" },
+  { key: "g4", label: "4TDM Growth" },
   { key: "4g", label: "4TDM Grudge Ball" },
   { key: "bastion", label: "Siege Bastion" },
   { key: "blitz", label: "Siege Blitz" },
@@ -209,90 +179,100 @@ const gameModes = [
   { key: "w33oldscdreadnoughtso4", label: "Old Dreadnoughts Open 4TDM" },
 ];
 
-const sortedModes = [...gameModes].sort((a, b) => {
-  const aIsInstance = a.key.match(/^e[0-9]$/);
-  const bIsInstance = b.key.match(/^e[0-9]$/);
-  
-  if (aIsInstance && !bIsInstance) return -1;
-  if (!aIsInstance && bIsInstance) return 1;
-  
-  return b.key.length - a.key.length;
-});
-
+const sortedModes = [...gameModes].sort((a, b) => b.key.length - a.key.length);
 const unknownLogged = new Set();
+
+let regionFilter = "all";
+let modeFilter = "all";
+let currentSorting = "clients";
+
+window.dumpUnknownModes = () => {
+  console.log("[Unknown Modes]", [...unknownLogged]);
+};
 
 function extractGameModeFromCode(code = "") {
   if (!code || typeof code !== "string") return "Unknown";
   const lower = code.toLowerCase();
 
-  const exactMatch = sortedModes.find(m => lower === m.key.toLowerCase());
-  if (exactMatch) return exactMatch.label;
-
-  const instanceMatch = lower.match(/^(e[0-9])(.*)/);
-  if (instanceMatch) {
-    const [_, instanceCode, modeCode] = instanceMatch;
-    const instanceLabel = gameModes.find(m => m.key.toLowerCase() === instanceCode)?.label || `Instance ${instanceCode[1]}`;
-    
-    if (!modeCode) return instanceLabel;
-
-    const modeMatch = sortedModes.find(m => 
-      modeCode === m.key.toLowerCase() || 
-      modeCode.startsWith(m.key.toLowerCase())
-    );
-    
-    if (modeMatch) {
-      return `${instanceLabel} (${modeMatch.label})`;
-    }
-    
-    // Try to parse the mode code character by character
-    const parsedMode = parseModeCode(modeCode);
-    if (parsedMode) {
-      return `${instanceLabel} (${parsedMode})`;
-    }
-    
-    return `${instanceLabel} (Unknown Mode)`; 
+  for (const mode of sortedModes) {
+    if (lower === mode.key.toLowerCase()) return mode.label;
   }
-  
-  const parsedMode = parseModeCode(lower);
-  if (parsedMode) return parsedMode;
 
-  return "Unknown";
-}
-
-function parseModeCode(code) {
-  const exactMatch = sortedModes.find(m => code === m.key.toLowerCase());
-  if (exactMatch) return exactMatch.label;
+  const tokens = lower.split(/[^a-z0-9]+/i);
+  for (const token of tokens) {
+    for (const mode of sortedModes) {
+      if (token === mode.key.toLowerCase()) return mode.label;
+    }
+  }
 
   for (const mode of sortedModes) {
-    if (code.includes(mode.key.toLowerCase())) {
-      return mode.label;
-    }
+    const regex = new RegExp(
+      `(?:^|[^a-z0-9])${mode.key.toLowerCase()}(?:[^a-z0-9]|$)`
+    );
+    if (regex.test(lower)) return mode.label;
   }
 
   const modifierMap = {
-    g: "Growth", a: "Arms Race", p: "Portal", o: "Open", m: "Maze"
+    g: "Growth",
+    a: "Arms Race",
+    p: "Portal",
+    o: "Open",
+    m: "Maze",
   };
   const teamMap = {
-    f: "FFA", d: "Duos", s: "Squads", c: "Clan Wars",
-    1: "1TDM", 2: "2TDM", 3: "3TDM", 4: "4TDM"
+    f: "FFA",
+    d: "Duos",
+    s: "Squads",
+    c: "Clan Wars",
+    1: "1TDM",
+    2: "2TDM",
+    3: "3TDM",
+    4: "4TDM",
   };
   const winMap = {
-    d: "Domination", m: "Mothership", a: "Assault",
-    t: "Tag", c: "CTF", z: "Sandbox"
+    d: "Domination",
+    m: "Mothership",
+    a: "Assault",
+    s: "Siege",
+    t: "Tag",
+    p: "Pandemic",
+    b: "Soccer",
+    g: "Grudge Ball",
+    e: "Elimination",
+    c: "Capture the Flag",
+    z: "Sandbox",
   };
 
-  const chars = code.replace(/[^a-z0-9]/gi, "").split("");
+  const chars = lower.replace(/[^a-z0-9]/gi, "").split("");
   const mods = [];
   let team = null;
   let win = null;
 
   for (const char of chars) {
-    if (!team && teamMap[char]) team = teamMap[char];
-    else if (!win && winMap[char]) win = winMap[char];
-    else if (modifierMap[char]) mods.push(modifierMap[char]);
+    if (!team && teamMap[char]) {
+      team = teamMap[char];
+    } else if (!win && winMap[char]) {
+      win = winMap[char];
+    } else if (modifierMap[char] && !mods.includes(modifierMap[char])) {
+      mods.push(modifierMap[char]);
+    }
   }
 
-  return [...mods, team, win].filter(Boolean).join(" ") || null;
+  const dynamicLabel = [...mods, team, win].filter(Boolean).join(" ");
+
+  const fallbackMatch = sortedModes.find((m) =>
+    lower.includes(m.key.toLowerCase())
+  );
+  if (fallbackMatch) return fallbackMatch.label;
+
+  if (!gameModes.some((g) => lower.includes(g.key.toLowerCase()))) {
+    if (!unknownLogged.has(lower)) {
+      console.warn("[UNRECOGNIZED MODE]", lower);
+      unknownLogged.add(lower);
+    }
+  }
+
+  return dynamicLabel || "Unknown";
 }
 
 function formatUptime(seconds) {
@@ -309,16 +289,37 @@ function getMsptClass(mspt) {
   return "mspt-good";
 }
 
-// Initialize filter variables
-let regionFilter = "all";
-let modeFilter = "all";
-let currentSorting = "clients";
+function logsArrayToJson(array) {
+  let allJson = [];
+  while (array.length > 0) {
+    const json = {
+      timestamp: array.shift(),
+      serverCount: array.shift(),
+    };
+    for (let index = 0; index < json.serverCount; index++) {
+      const name = array.shift();
+      const clients = array.shift();
+      const mspt = array.shift();
+      const uptime = array.shift();
+
+      json[name] = {
+        name,
+        clients,
+        mspt,
+        uptime,
+      };
+    }
+    allJson.push(json);
+  }
+  return allJson;
+}
 
 function filterTable() {
   const search = document.getElementById("searchInput").value.toLowerCase();
   const tableBody = document.getElementById("serverTableBody");
 
   let totalPlayers = 0;
+  let visibleRow = "";
 
   [...tableBody.rows].forEach((row) => {
     const name = row.getAttribute("data-name") || "";
@@ -334,18 +335,100 @@ function filterTable() {
 
     if (visible) {
       totalPlayers += parseInt(row.getAttribute("data-players")) || 0;
+      if (visibleRow === "") {
+        visibleRow = name;
+      } else {
+        visibleRow = null;
+      }
     }
   });
 
-  if (canvas) canvas.style.display = "none";
-
-  const totalPlayersElement = document.getElementById("total-players");
-  if (totalPlayersElement) {
-    totalPlayersElement.innerHTML = 
-      `<i class="fas fa-users"></i> ${(regionFilter === "all" && modeFilter === "all"
-        ? "Total players: "
-        : "Filtered players: ") + totalPlayers}`;
+  if (visibleRow) {
+    canvas.style.display = "";
+    renderLogsToCanvas(visibleRow);
+  } else {
+    canvas.style.display = "none";
   }
+
+  document.getElementById("total-players").textContent =
+    (regionFilter === "all" && modeFilter === "all"
+      ? "Total players: "
+      : "Filtered players: ") + totalPlayers;
+}
+
+let jsonServerLogs;
+function renderLogsToCanvas(serverName) {
+  if (!jsonServerLogs) {
+    return;
+  }
+
+  canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+
+  canvasContext.strokeStyle = "#888";
+  canvasContext.fillStyle = "#888";
+  canvasContext.lineWidth = 0.5;
+
+  canvasContext.textAlign = "right";
+  canvasContext.textBaseline = "top";
+  canvasContext.font = "9px sans-serif";
+
+  const lastThirtyMinutes = Date.now() % 1800000;
+  for (let offset = lastThirtyMinutes; offset < 10800000; offset += 1800000) {
+    const time = new Date(Date.now() - offset);
+
+    const xPosition = (canvas.width * (10800e3 - offset)) / 10800e3;
+
+    canvasContext.beginPath();
+    canvasContext.moveTo(xPosition, 0);
+    canvasContext.lineTo(xPosition, canvas.height);
+    canvasContext.stroke();
+
+    canvasContext.fillText(
+      time.toLocaleTimeString({}, { hour: "numeric", minute: "2-digit" }),
+      xPosition - 2,
+      2
+    );
+  }
+
+  for (let players = 5; players < 70; players += 5) {
+    const yPosition = canvas.height - 3 * players;
+
+    canvasContext.beginPath();
+    canvasContext.moveTo(0, yPosition);
+    canvasContext.lineTo(canvas.width, yPosition);
+    canvasContext.stroke();
+
+    canvasContext.fillText(players, canvas.width - 2, yPosition + 2);
+  }
+
+  canvasContext.strokeStyle = "#08f";
+  canvasContext.fillStyle = "#08f3";
+
+  canvasContext.beginPath();
+
+  let firstXPosition, firstYPosition;
+  let lastYPosition;
+
+  jsonServerLogs.forEach((logPoint) => {
+    const timeSince = Date.now() - new Date(logPoint.timestamp).getTime();
+    const xPosition = (canvas.width * (10800e3 - timeSince)) / 10800e3;
+    const yPosition = canvas.height - 3 * (logPoint[serverName]?.clients || 0);
+
+    canvasContext.lineTo(xPosition, yPosition);
+
+    firstXPosition ||= xPosition;
+    firstYPosition ||= yPosition;
+    lastYPosition = yPosition;
+  });
+
+  canvasContext.lineTo(-100, lastYPosition);
+  canvasContext.lineTo(-100, canvas.height + 100);
+  canvasContext.lineTo(canvas.width + 100, canvas.height + 100);
+  canvasContext.lineTo(canvas.width + 100, firstYPosition);
+  canvasContext.lineTo(firstXPosition, firstYPosition);
+
+  canvasContext.fill();
+  canvasContext.stroke();
 }
 
 async function fetchAndDisplay() {
@@ -356,6 +439,17 @@ async function fetchAndDisplay() {
       throw new Error(`HTTP error! status: ${resServers.status}`);
     }
     const jsonServers = await resServers.json();
+
+    let jsonServerLogs = null;
+    try {
+      const resServerLogs = await fetch(LOGS_URL());
+      if (resServerLogs.ok) {
+        const arrayServerLogs = await resServerLogs.json();
+        jsonServerLogs = logsArrayToJson(arrayServerLogs);
+      }
+    } catch (logError) {
+      console.warn("Failed to fetch server logs:", logError);
+    }
 
     const onlineServers = jsonServers && jsonServers.status 
       ? Object.values(jsonServers.status).filter(server => server) 
@@ -398,7 +492,6 @@ async function fetchAndDisplay() {
       const dot = document.createElement("div");
       dot.className = "server-dot";
       
-      // Determine health status
       if (mspt >= 30) {
         dot.classList.add("bad");
       } else if (mspt >= 15) {
@@ -409,7 +502,6 @@ async function fetchAndDisplay() {
       
       dot.setAttribute("data-tooltip", `${server.name || 'Unknown'} | ${players} players | ${mspt.toFixed(1)} mspt`);
       
-      // Size based on player count (bigger = more players)
       const size = 12 + Math.min(players * 2, 12);
       dot.style.width = `${size}px`;
       dot.style.height = `${size}px`;
@@ -463,6 +555,12 @@ async function fetchAndDisplay() {
         `<i class="fas fa-clock"></i> Last updated: ${new Date().toLocaleTimeString()}`;
     }
     
+    const activeServersElement = document.getElementById("active-servers");
+    if (activeServersElement) {
+      activeServersElement.innerHTML = 
+        `<i class="fas fa-server"></i> ${onlineServers.length}`;
+    }
+    
     filterTable();
   } catch (err) {
     if (tableBody) {
@@ -472,32 +570,7 @@ async function fetchAndDisplay() {
   }
 }
 
-function toggleTheme(theme) {
-  if (theme === 'light') {
-    document.body.classList.add('light-theme');
-    const themeToggle = document.getElementById('themeToggle');
-    if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-  } else if (theme === 'dark') {
-    document.body.classList.remove('light-theme');
-    const themeToggle = document.getElementById('themeToggle');
-    if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-  } else {
-    // Toggle based on current state
-    if (document.body.classList.contains('light-theme')) {
-      document.body.classList.remove('light-theme');
-      const themeToggle = document.getElementById('themeToggle');
-      if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-    } else {
-      document.body.classList.add('light-theme');
-      const themeToggle = document.getElementById('themeToggle');
-      if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-    }
-  }
-}
-
-// Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
-  // Set up filter buttons
   document.querySelectorAll(".filter-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
       if (btn.dataset.region) {
@@ -529,33 +602,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Set up search input
   const searchInput = document.getElementById("searchInput");
   if (searchInput) {
     searchInput.addEventListener("input", function(e) {
-      if (e.target.value.toLowerCase() === "$toggle-light") {
-        toggleTheme('light');
-        e.target.value = "";
-        filterTable();
-      } else if (e.target.value.toLowerCase() === "$toggle-dark") {
-        toggleTheme('dark');
-        e.target.value = "";
-        filterTable();
-      } else {
-        filterTable();
-      }
+      filterTable();
     });
   }
 
-  // Set up theme toggle
-  const themeToggle = document.getElementById('themeToggle');
-  if (themeToggle) {
-    themeToggle.addEventListener('click', function() {
-      toggleTheme();
-    });
-  }
-
-  // Initial fetch and set up interval
   fetchAndDisplay();
   setInterval(fetchAndDisplay, 3000);
 });
