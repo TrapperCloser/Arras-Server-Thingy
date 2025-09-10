@@ -11,18 +11,6 @@ const regions = {
 };
 
 const gameModes = [
-  <!--
-  { key: "e0", label: "Sandbox Redirect" },
-  { key: "e1", label: "Server Instance 1" },
-  { key: "e2", label: "Server Instance 2" },
-  { key: "e3", label: "Server Instance 3" },
-  { key: "e4", label: "Server Instance 4" },
-  { key: "e5", label: "Server Instance 5" },
-  { key: "e6", label: "Server Instance 6" },
-  { key: "e7", label: "Server Instance 7" },
-  { key: "e8", label: "Server Instance 8" },
-  { key: "e9", label: "Server Instance 9" },
-   -->
   { key: "ac", label: "Arms Race Clanwars" },
   { key: "af", label: "Arms Race FFA" },
   { key: "am", label: "Arms Race Maze" },
