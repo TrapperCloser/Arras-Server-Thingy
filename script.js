@@ -270,7 +270,6 @@ function extractGameModeFromCode(code = "") {
 }
 
 function parseModeCode(code) {
-
   const exactMatch = sortedModes.find(m => code === m.key.toLowerCase());
   if (exactMatch) return exactMatch.label;
 
@@ -305,20 +304,6 @@ function parseModeCode(code) {
 
   return [...mods, team, win].filter(Boolean).join(" ") || null;
 }
-  const fallbackMatch = sortedModes.find((m) =>
-    lower.includes(m.key.toLowerCase())
-  );
-  if (fallbackMatch) return fallbackMatch.label;
-
-  if (!gameModes.some((g) => lower.includes(g.key.toLowerCase()))) {
-    if (!unknownLogged.has(lower)) {
-      console.warn("[UNRECOGNIZED MODE]", lower);
-      unknownLogged.add(lower);
-    }
-  }
-
-  return dynamicLabel || "Unknown";
-}
 
 function formatUptime(seconds) {
   if (seconds < 3600)
@@ -333,6 +318,11 @@ function getMsptClass(mspt) {
   if (mspt >= 15) return "mspt-mid";
   return "mspt-good";
 }
+
+// Initialize filter variables
+let regionFilter = "all";
+let modeFilter = "all";
+let currentSorting = "clients";
 
 function filterTable() {
   const search = document.getElementById("searchInput").value.toLowerCase();
@@ -357,12 +347,15 @@ function filterTable() {
     }
   });
 
-  canvas.style.display = "none";
+  if (canvas) canvas.style.display = "none";
 
-  document.getElementById("total-players").innerHTML = 
-    `<i class="fas fa-users"></i> ${(regionFilter === "all" && modeFilter === "all"
-      ? "Total players: "
-      : "Filtered players: ") + totalPlayers}`;
+  const totalPlayersElement = document.getElementById("total-players");
+  if (totalPlayersElement) {
+    totalPlayersElement.innerHTML = 
+      `<i class="fas fa-users"></i> ${(regionFilter === "all" && modeFilter === "all"
+        ? "Total players: "
+        : "Filtered players: ") + totalPlayers}`;
+  }
 }
 
 async function fetchAndDisplay() {
@@ -381,7 +374,7 @@ async function fetchAndDisplay() {
     let totalPlayers = 0;
     let oldDreadnoughtsPlayers = 0;
 
-    tableBody.innerHTML = "";
+    if (tableBody) tableBody.innerHTML = "";
     
     if (onlineServers && onlineServers.length) {
       onlineServers.sort((a, b) => {
@@ -404,7 +397,7 @@ async function fetchAndDisplay() {
     });
 
     const serverGrid = document.getElementById("server-grid");
-    serverGrid.innerHTML = "";
+    if (serverGrid) serverGrid.innerHTML = "";
 
     onlineServers.forEach((server) => {
       if (!server) return;
@@ -431,7 +424,7 @@ async function fetchAndDisplay() {
       dot.style.width = `${size}px`;
       dot.style.height = `${size}px`;
       
-      serverGrid.appendChild(dot);
+      if (serverGrid) serverGrid.appendChild(dot);
     });
 
     onlineServers.forEach((server) => {
@@ -463,89 +456,116 @@ async function fetchAndDisplay() {
         <td title="${server.mode || server.code || "Unknown"}"><i class="fas fa-gamepad"></i> ${gameMode}</td>
         <td><i class="fas fa-plug"></i> ${server.host && server.host.split ? server.host.split("/")[1] : "?"}</td>
       `;
-      tableBody.appendChild(row);
+      if (tableBody) tableBody.appendChild(row);
     });
 
-    document.getElementById("total-players").innerHTML = 
-      `<i class="fas fa-users"></i> ${(regionFilter === "all" && modeFilter === "all"
-        ? "Total players: "
-        : "Filtered players: ") + totalPlayers}`;
-    document.getElementById("last-updated").innerHTML = 
-      `<i class="fas fa-clock"></i> Last updated: ${new Date().toLocaleTimeString()}`;
+    const totalPlayersElement = document.getElementById("total-players");
+    if (totalPlayersElement) {
+      totalPlayersElement.innerHTML = 
+        `<i class="fas fa-users"></i> ${(regionFilter === "all" && modeFilter === "all"
+          ? "Total players: "
+          : "Filtered players: ") + totalPlayers}`;
+    }
+    
+    const lastUpdatedElement = document.getElementById("last-updated");
+    if (lastUpdatedElement) {
+      lastUpdatedElement.innerHTML = 
+        `<i class="fas fa-clock"></i> Last updated: ${new Date().toLocaleTimeString()}`;
+    }
+    
     filterTable();
   } catch (err) {
-    tableBody.innerHTML = `<tr><td colspan="8"><i class="fas fa-exclamation-triangle"></i> Error loading data: ${err.message}</td></tr>`;
+    if (tableBody) {
+      tableBody.innerHTML = `<tr><td colspan="8"><i class="fas fa-exclamation-triangle"></i> Error loading data: ${err.message}</td></tr>`;
+    }
     console.error("Failed to fetch server status:", err);
   }
 }
 
-document.querySelectorAll(".filter-btn").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    if (btn.dataset.region) {
-      document
-        .querySelectorAll(".filter-btn[data-region]")
-        .forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-      regionFilter = btn.dataset.region;
-      filterTable();
-    }
-
-    if (btn.dataset.mode) {
-      document
-        .querySelectorAll(".filter-btn[data-mode]")
-        .forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-      modeFilter = btn.dataset.mode;
-      filterTable();
-    }
-
-    if (btn.dataset.sorting) {
-      document
-        .querySelectorAll(".filter-btn[data-sorting]")
-        .forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-      currentSorting = btn.dataset.sorting;
-      fetchAndDisplay();
-    }
-  });
-});
-
 function toggleTheme(theme) {
   if (theme === 'light') {
     document.body.classList.add('light-theme');
-    document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
   } else if (theme === 'dark') {
     document.body.classList.remove('light-theme');
-    document.getElementById('themeToggle').innerHTML = '<i class="fas fa-moon"></i>';
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
   } else {
     // Toggle based on current state
     if (document.body.classList.contains('light-theme')) {
       document.body.classList.remove('light-theme');
-      document.getElementById('themeToggle').innerHTML = '<i class="fas fa-moon"></i>';
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
     } else {
       document.body.classList.add('light-theme');
-      document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
     }
   }
 }
 
-document.getElementById("searchInput").addEventListener("input", function(e) {
-  if (e.target.value.toLowerCase() === "$toggle-light") {
-    toggleTheme('light');
-    e.target.value = "";
-    filterTable();
-  } else if (e.target.value.toLowerCase() === "$toggle-dark") {
-    toggleTheme('dark');
-    e.target.value = "";
-    filterTable();
-  } else {
-    filterTable();
+// Initialize the page
+document.addEventListener('DOMContentLoaded', function() {
+  // Set up filter buttons
+  document.querySelectorAll(".filter-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (btn.dataset.region) {
+        document
+          .querySelectorAll(".filter-btn[data-region]")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        regionFilter = btn.dataset.region;
+        filterTable();
+      }
+
+      if (btn.dataset.mode) {
+        document
+          .querySelectorAll(".filter-btn[data-mode]")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        modeFilter = btn.dataset.mode;
+        filterTable();
+      }
+
+      if (btn.dataset.sorting) {
+        document
+          .querySelectorAll(".filter-btn[data-sorting]")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentSorting = btn.dataset.sorting;
+        fetchAndDisplay();
+      }
+    });
+  });
+
+  // Set up search input
+  const searchInput = document.getElementById("searchInput");
+  if (searchInput) {
+    searchInput.addEventListener("input", function(e) {
+      if (e.target.value.toLowerCase() === "$toggle-light") {
+        toggleTheme('light');
+        e.target.value = "";
+        filterTable();
+      } else if (e.target.value.toLowerCase() === "$toggle-dark") {
+        toggleTheme('dark');
+        e.target.value = "";
+        filterTable();
+      } else {
+        filterTable();
+      }
+    });
   }
-});
 
-document.getElementById('themeToggle').addEventListener('click', function() {
-  toggleTheme();
-});
+  // Set up theme toggle
+  const themeToggle = document.getElementById('themeToggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function() {
+      toggleTheme();
+    });
+  }
 
-fetchAndDisplay();
-setInterval(fetchAndDisplay, 3000);
+  // Initial fetch and set up interval
+  fetchAndDisplay();
+  setInterval(fetchAndDisplay, 3000);
+});
