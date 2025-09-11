@@ -498,8 +498,7 @@ async function fetchAndDisplay() {
     const serverGrid = document.getElementById("server-grid");
     if (serverGrid) serverGrid.innerHTML = "";
 
-    onlineServers.forEach((server) {
-      if (!server) return;
+    onlineServers.forEach((server) => {
       
       const mspt = server.mspt || 0;
       const players = server.clients || 0;
