@@ -14,6 +14,8 @@
   --danger-color: #f44336;
   --card-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   --transition-speed: 0.25s;
+  --grid-size: 30px;
+  --grid-color: rgba(255, 255, 255, 0.03);
 }
 
 .light-theme {
@@ -31,6 +33,7 @@
   --warning-color: #e65100;
   --danger-color: #c62828;
   --card-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  --grid-color: rgba(0, 0, 0, 0.03);
 }
 
 body {
@@ -42,6 +45,11 @@ body {
   line-height: 1.6;
   min-height: 100vh;
   transition: background-color var(--transition-speed), color var(--transition-speed);
+  background-image: 
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+  background-position: center center;
 }
 
 header {
@@ -455,6 +463,10 @@ footer {
 }
 
 @media (max-width: 768px) {
+  :root {
+    --grid-size: 20px;
+  }
+  
   body {
     padding: 15px;
   }
@@ -509,9 +521,5 @@ footer {
   th, td {
     padding: 10px 8px;
     font-size: 13px;
-  }
-
-  h1 {
-    font-size: 1.6rem;
   }
 }
