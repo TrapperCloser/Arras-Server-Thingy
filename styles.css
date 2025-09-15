@@ -24,6 +24,13 @@
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-bold: 700;
+  
+  /* New variables for button animations */
+  --particle-count: 8;
+  --particle-size: 4px;
+  --ripple-size: 40px;
+  --ripple-color: rgba(255, 255, 255, 0.6);
+  --glow-intensity: 10px;
 }
 
 .light-theme {
@@ -36,6 +43,7 @@
   --border-color: rgba(0, 0, 0, 0.1);
   --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   --grid-color: rgba(0, 0, 0, 0.02);
+  --ripple-color: rgba(0, 0, 0, 0.2);
 }
 
 * {
@@ -177,7 +185,10 @@ h5 i {
   margin-bottom: 0;
 }
 
+/* Enhanced filter button with animations and particles */
 .filter-btn {
+  position: relative;
+  overflow: hidden;
   padding: 12px 20px;
   font-size: 14px;
   background: rgba(40, 40, 60, 0.6);
@@ -193,17 +204,34 @@ h5 i {
   gap: 8px;
   font-family: var(--font-family);
   backdrop-filter: blur(10px);
+  z-index: 1;
 }
 
 .light-theme .filter-btn {
   background: rgba(220, 220, 220, 0.6);
 }
 
-.filter-btn:hover {
+.filter-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: var(--primary-color);
+  clip-path: circle(0% at 50% 50%);
+  transition: clip-path 0.5s ease;
+  z-index: -1;
+}
+
+.filter-btn:hover {
   color: white;
   transform: translateY(-3px);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.filter-btn:hover::before {
+  clip-path: circle(100% at 50% 50%);
 }
 
 .filter-btn.active {
@@ -212,6 +240,178 @@ h5 i {
   border-color: var(--primary-dark);
   box-shadow: 0 6px 20px rgba(74, 107, 255, 0.3);
   transform: translateY(-2px);
+  animation: pulse 2s infinite;
+}
+
+/* Ripple effect */
+.filter-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--ripple-size);
+  height: var(--ripple-size);
+  background: var(--ripple-color);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  z-index: 0;
+}
+
+.filter-btn:active::after {
+  animation: ripple 0.6s ease-out;
+}
+
+/* Particle effects */
+.filter-btn .particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.filter-btn .particle {
+  position: absolute;
+  width: var(--particle-size);
+  height: var(--particle-size);
+  background: white;
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.filter-btn:hover .particle {
+  animation: particles 1s ease-in-out;
+}
+
+/* Create particles dynamically */
+.filter-btn .particle:nth-child(1) {
+  top: 20%;
+  left: 20%;
+  animation-delay: 0.1s;
+}
+
+.filter-btn .particle:nth-child(2) {
+  top: 20%;
+  left: 80%;
+  animation-delay: 0.2s;
+}
+
+.filter-btn .particle:nth-child(3) {
+  top: 80%;
+  left: 20%;
+  animation-delay: 0.3s;
+}
+
+.filter-btn .particle:nth-child(4) {
+  top: 80%;
+  left: 80%;
+  animation-delay: 0.4s;
+}
+
+.filter-btn .particle:nth-child(5) {
+  top: 50%;
+  left: 50%;
+  animation-delay: 0.5s;
+}
+
+.filter-btn .particle:nth-child(6) {
+  top: 30%;
+  left: 50%;
+  animation-delay: 0.6s;
+}
+
+.filter-btn .particle:nth-child(7) {
+  top: 70%;
+  left: 50%;
+  animation-delay: 0.7s;
+}
+
+.filter-btn .particle:nth-child(8) {
+  top: 50%;
+  left: 30%;
+  animation-delay: 0.8s;
+}
+
+/* Keyframe animations */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(74, 107, 255, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 var(--glow-intensity) rgba(74, 107, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(74, 107, 255, 0);
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(4);
+    opacity: 0;
+  }
+}
+
+@keyframes particles {
+  0% {
+    transform: translate(0, 0) scale(0);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(var(--tx, 0), var(--ty, 0)) scale(1);
+    opacity: 0;
+  }
+}
+
+/* Set random directions for particles */
+.filter-btn .particle:nth-child(1) {
+  --tx: -20px;
+  --ty: -20px;
+}
+
+.filter-btn .particle:nth-child(2) {
+  --tx: 20px;
+  --ty: -20px;
+}
+
+.filter-btn .particle:nth-child(3) {
+  --tx: -20px;
+  --ty: 20px;
+}
+
+.filter-btn .particle:nth-child(4) {
+  --tx: 20px;
+  --ty: 20px;
+}
+
+.filter-btn .particle:nth-child(5) {
+  --tx: -15px;
+  --ty: -15px;
+}
+
+.filter-btn .particle:nth-child(6) {
+  --tx: 0;
+  --ty: -25px;
+}
+
+.filter-btn .particle:nth-child(7) {
+  --tx: 0;
+  --ty: 25px;
+}
+
+.filter-btn .particle:nth-child(8) {
+  --tx: -25px;
+  --ty: 0;
 }
 
 #stats {
@@ -475,6 +675,12 @@ footer {
   
   .theme-toggle:hover {
     transform: none !important;
+  }
+  
+  .filter-btn::before,
+  .filter-btn::after,
+  .filter-btn .particle {
+    display: none !important;
   }
 }
 
