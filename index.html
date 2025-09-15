@@ -23,37 +23,265 @@
 
     <h5><i class="fas fa-gamepad"></i>Gamemode Filter</h5>
     <div id="filters">
-      <button class="filter-btn active" data-mode="all"><i class="fas fa-globe"></i>All</button>
-      <button class="filter-btn" data-mode="ffa"><i class="fas fa-user"></i>FFA</button>
-      <button class="filter-btn" data-mode="maze"><i class="fas fa-project-diagram"></i>Maze</button>
-      <button class="filter-btn" data-mode="siege"><i class="fas fa-fort-awesome"></i>Siege</button>
-      <button class="filter-btn" data-mode="old dreadnoughts"><i class="fas fa-ship"></i>Old Dreadnoughts</button>
-      <button class="filter-btn" data-mode="growth"><i class="fas fa-expand"></i>Growth</button>
-      <button class="filter-btn" data-mode="arms race"><i class="fas fa-fighter-jet"></i>Arms Race</button>
-      <button class="filter-btn" data-mode="2tdm"><i class="fas fa-users"></i>2TDM</button>
-      <button class="filter-btn" data-mode="4tdm"><i class="fas fa-users"></i>4TDM</button>
-      <button class="filter-btn" data-mode="sandbox"><i class="fas fa-cubes"></i>Sandbox</button>
+      <button class="filter-btn active" data-mode="all">
+        <i class="fas fa-globe"></i>All
+        <div class="particles">
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+        </div>
+      </button>
+      <button class="filter-btn" data-mode="ffa">
+        <i class="fas fa-user"></i>FFA
+        <div class="particles">
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+        </div>
+      </button>
+      <button class="filter-btn" data-mode="maze">
+        <i class="fas fa-project-diagram"></i>Maze
+        <div class="particles">
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+        </div>
+      </button>
+      <button class="filter-btn" data-mode="siege">
+        <i class="fas fa-fort-awesome"></i>Siege
+        <div class="particles">
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+        </div>
+      </button>
+      <button class="filter-btn" data-mode="old dreadnoughts">
+        <i class="fas fa-ship"></i>Old Dreadnoughts
+        <div class="particles">
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+        </div>
+      </button>
+      <button class="filter-btn" data-mode="growth">
+        <i class="fas fa-expand"></i>Growth
+        <div class="particles">
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+        </div>
+      </button>
+      <button class="filter-btn" data-mode="arms race">
+        <i class="fas fa-fighter-jet"></i>Arms Race
+        <div class="particles">
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+        </div>
+      </button>
+      <button class="filter-btn" data-mode="2tdm">
+        <i class="fas fa-users"></i>2TDM
+        <div class="particles">
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+        </div>
+      </button>
+      <button class="filter-btn" data-mode="4tdm">
+        <i class="fas fa-users"></i>4TDM
+        <div class="particles">
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+        </div>
+      </button>
+      <button class="filter-btn" data-mode="sandbox">
+        <i class="fas fa-cubes"></i>Sandbox
+        <div class="particles">
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+        </div>
+      </button>
     </div>
 
     <div id="row-container">
       <div>
         <h5><i class="fas fa-map-marker-alt"></i>Region Filter</h5>
         <div id="region-filters">
-          <button class="filter-btn active" data-region="all"><i class="fas fa-globe-americas"></i>All</button>
-          <button class="filter-btn" data-region="us central"><i class="fas fa-flag-usa"></i>US Central</button>
-          <button class="filter-btn" data-region="us west"><i class="fas fa-flag-usa"></i>US West</button>
-          <button class="filter-btn" data-region="europe"><i class="fas fa-flag-eu"></i>Europe</button>
-          <button class="filter-btn" data-region="asia"><i class="fas fa-flag"></i>Asia</button>
-          <button class="filter-btn" data-region="oceania"><i class="fas fa-flag"></i>Oceania</button>
+          <button class="filter-btn active" data-region="all">
+            <i class="fas fa-globe-americas"></i>All
+            <div class="particles">
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+            </div>
+          </button>
+          <button class="filter-btn" data-region="us central">
+            <i class="fas fa-flag-usa"></i>US Central
+            <div class="particles">
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+            </div>
+          </button>
+          <button class="filter-btn" data-region="us west">
+            <i class="fas fa-flag-usa"></i>US West
+            <div class="particles">
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+            </div>
+          </button>
+          <button class="filter-btn" data-region="europe">
+            <i class="fas fa-flag-eu"></i>Europe
+            <div class="particles">
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+            </div>
+          </button>
+          <button class="filter-btn" data-region="asia">
+            <i class="fas fa-flag"></i>Asia
+            <div class="particles">
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+            </div>
+          </button>
+          <button class="filter-btn" data-region="oceania">
+            <i class="fas fa-flag"></i>Oceania
+            <div class="particles">
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+            </div>
+          </button>
         </div>
       </div>
 
       <div>
         <h5><i class="fas fa-sort"></i>Sorting</h5>
         <div id="sorting">
-          <button class="filter-btn active" data-sorting="clients"><i class="fas fa-users"></i>Highest Players</button>
-          <button class="filter-btn" data-sorting="uptime"><i class="fas fa-clock"></i>Highest Uptime</button>
-          <button class="filter-btn" data-sorting="mspt"><i class="fas fa-tachometer-alt"></i>Highest MSPT</button>
+          <button class="filter-btn active" data-sorting="clients">
+            <i class="fas fa-users"></i>Highest Players
+            <div class="particles">
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+            </div>
+          </button>
+          <button class="filter-btn" data-sorting="uptime">
+            <i class="fas fa-clock"></i>Highest Uptime
+            <div class="particles">
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+            </div>
+          </button>
+          <button class="filter-btn" data-sorting="mspt">
+            <i class="fas fa-tachometer-alt"></i>Highest MSPT
+            <div class="particles">
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+            </div>
+          </button>
         </div>
       </div>
     </div>
