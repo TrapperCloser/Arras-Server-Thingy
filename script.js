@@ -1,7 +1,7 @@
 const API_URL = "https://t4mebdah2ksfasgi-c.uvwx.xyz:8443/2222/status";
-const LOGS_URL = () =>
+/*const LOGS_URL = () =>
   "https://verify-dev.glitch.me/api/server-data/array?timestamp=" +
-  new Date(Date.now() - 10800e3).toISOString();
+  new Date(Date.now() - 10800e3).toISOString(); */
 
 const canvas = document.querySelector("#player-count-canvas");
 const canvasContext = canvas.getContext("2d");
