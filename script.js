@@ -192,6 +192,7 @@ const gameModes = [
   { key: "w33oldscdreadnoughts4", label: "Old Dreadnoughts 4TDM" },
   { key: "w33oldscdreadnoughtso3", label: "Old Dreadnoughts Open 3TDM" },
   { key: "w33oldscdreadnoughtso4", label: "Old Dreadnoughts Open 4TDM" },
+  { key: "%", label: "Privated Server"},
 ];
 
 const sortedModes = [...gameModes].sort((a, b) => b.key.length - a.key.length);
