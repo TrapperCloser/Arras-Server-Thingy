@@ -1,9 +1,10 @@
 :root {
-  --primary-color: #2ecc71;
-  --dark-bg: #1a1a1a;
-  --card-bg: #2d2d2d;
-  --text-color: #e6e6e6;
-  --border-color: #444;
+  --primary-color: #9ED948;
+  --dark-bg: #f8f9fa;
+  --card-bg: #ffffff;
+  --text-color: #2d3748;
+  --border-color: #e2e8f0;
+  --font-family: 'Ubuntu', Arial, sans-serif;
 }
 
 * {
@@ -13,7 +14,7 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: var(--font-family);
   background-color: var(--dark-bg);
   color: var(--text-color);
   margin: 0;
@@ -44,6 +45,7 @@ h1 {
   color: var(--text-color);
   margin: 0 0 12px;
   font-size: 1.8rem;
+  font-family: var(--font-family);
 }
 
 h5 {
@@ -51,6 +53,7 @@ h5 {
   color: var(--primary-color);
   margin: 20px 0 12px;
   font-size: 1rem;
+  font-family: var(--font-family);
 }
 
 #searchInput {
@@ -63,6 +66,7 @@ h5 {
   border-radius: 6px;
   background: var(--card-bg);
   color: var(--text-color);
+  font-family: var(--font-family);
 }
 
 #searchInput:focus {
@@ -96,7 +100,7 @@ h5 {
 .filter-btn {
   padding: 8px 14px;
   font-size: 12px;
-  background: #333;
+  background: #f7f7f7;
   border: 1px solid var(--border-color);
   border-radius: 6px;
   color: var(--text-color);
@@ -105,10 +109,11 @@ h5 {
   display: flex;
   align-items: center;
   gap: 6px;
+  font-family: var(--font-family);
 }
 
 .filter-btn:hover {
-  background: #444;
+  background: #edf2f7;
 }
 
 .filter-btn.active {
@@ -123,14 +128,16 @@ h5 {
   color: var(--text-color);
   text-align: center;
   padding: 15px;
+  font-family: var(--font-family);
 }
 
 #last-updated {
   font-size: 0.8rem;
-  color: #999;
+  color: #718096;
   display: block;
   margin-top: 6px;
   font-style: italic;
+  font-family: var(--font-family);
 }
 
 .table-container {
@@ -145,6 +152,7 @@ table {
   min-width: 700px;
   border-collapse: collapse;
   background-color: transparent;
+  font-family: var(--font-family);
 }
 
 th,
@@ -153,45 +161,52 @@ td {
   padding: 12px;
   text-align: left;
   font-size: 13px;
+  font-family: var(--font-family);
 }
 
 th {
   background: var(--primary-color);
   color: white;
   font-weight: bold;
+  font-family: var(--font-family);
 }
 
 tr:nth-child(even) {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(0, 0, 0, 0.02);
 }
 
 tr:hover {
-  background-color: rgba(46, 204, 113, 0.1);
+  background-color: rgba(158, 217, 72, 0.1);
 }
 
 .mspt-good {
-  color: #2ecc71;
+  color: #38a169;
+  font-family: var(--font-family);
 }
 
 .mspt-mid {
-  color: #f39c12;
+  color: #d69e2e;
+  font-family: var(--font-family);
 }
 
 .mspt-bad {
-  color: #e74c3c;
+  color: #e53e3e;
+  font-family: var(--font-family);
 }
 
 footer {
   text-align: center;
   margin-top: 30px;
   font-size: 0.8rem;
-  color: #999;
+  color: #718096;
   padding: 20px 0;
+  font-family: var(--font-family);
 }
 
 .server-redirect {
   color: var(--primary-color);
   text-decoration: none;
+  font-family: var(--font-family);
 }
 
 .server-redirect:hover {
