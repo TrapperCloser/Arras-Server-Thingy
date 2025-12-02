@@ -585,39 +585,7 @@ async function fetchAndDisplay() {
   }
 }
 
-// Theme toggle functionality
-function setupThemeToggle() {
-  const themeToggle = document.querySelector('.theme-toggle');
-  const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-  
-  // Set initial theme based on system preference or saved preference
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme) {
-    document.documentElement.classList.toggle('light-theme', savedTheme === 'light');
-  } else {
-    document.documentElement.classList.toggle('light-theme', !prefersDarkScheme.matches);
-  }
-  
-  // Update icon based on current theme
-  updateThemeIcon();
-  
-  // Add click event listener
-  themeToggle.addEventListener('click', () => {
-    const isLightTheme = document.documentElement.classList.toggle('light-theme');
-    localStorage.setItem('theme', isLightTheme ? 'light' : 'dark');
-    updateThemeIcon();
-  });
-  
-  function updateThemeIcon() {
-    const isLightTheme = document.documentElement.classList.contains('light-theme');
-    themeToggle.innerHTML = isLightTheme ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
-  }
-}
-
 document.addEventListener('DOMContentLoaded', function() {
-  // Setup theme toggle
-  setupThemeToggle();
-  
   // Setup filter buttons
   document.querySelectorAll(".filter-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
