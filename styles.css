@@ -49,39 +49,39 @@ h1 {
 }
 
 .rainbow-text {
-  background: linear-gradient(
-    to right,
-    #ff0000,
-    #ff8000,
-    #ffff00,
-    #80ff00,
-    #00ff80,
-    #00ffff,
-    #0080ff,
-    #8000ff,
-    #ff00ff,
-    #ff0080
+  background: repeating-linear-gradient(
+    90deg,
+    #ff0000 0% 10%,
+    #ff8000 10% 20%,
+    #ffff00 20% 30%,
+    #80ff00 30% 40%,
+    #00ff80 40% 50%,
+    #00ffff 50% 60%,
+    #0080ff 60% 70%,
+    #8000ff 70% 80%,
+    #ff00ff 80% 90%,
+    #ff0080 90% 100%
   );
-  background-size: 300% 100%;
-  background-clip: text;
+  
+  background-size: 200% 100%;
+  background-repeat: repeat;
+
   -webkit-background-clip: text;
+  background-clip: text;
   color: transparent;
 
-  animation: rainbow-slide 6s linear infinite;
   font-size: 1.5rem;
   font-weight: bold;
   margin: 0 0 20px;
   font-family: var(--font-family);
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+
+  animation: rainbow-move 4s linear infinite;
 }
 
-@keyframes rainbow-slide {
-  from {
-    background-position: 0% 0;
-  }
-  to {
-    background-position: -300% 0;
-  }
+@keyframes rainbow-move {
+  from { background-position: 0% 0; }
+  to   { background-position: 100% 0; }
 }
 
 h5 {
