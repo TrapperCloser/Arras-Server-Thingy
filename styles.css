@@ -48,38 +48,6 @@ h1 {
   font-family: var(--font-family);
 }
 
-.rainbow-text {
-  font-size: 50px;
-  background: linear-gradient(
-    to right,
-    red,
-    orange,
-    yellow,
-    green,
-    cyan,
-    blue,
-    indigo,
-    violet,
-    red
-  );
-
-  background-size: 300% 100%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-
-  animation: rainbow-scroll 6s linear infinite;
-}
-
-@keyframes rainbow-scroll {
-  from {
-    background-position: 0% 0;
-  }
-  to {
-    background-position: 100% 0;
-  }
-}
-
 h5 {
   text-align: center;
   color: var(--primary-color);
