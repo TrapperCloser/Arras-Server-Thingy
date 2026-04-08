@@ -168,7 +168,6 @@ const gameModes = [
   { key: "s", label: "Squads" },
   { key: "t", label: "Tag" },
   { key: "tar", label: "Tartarus" },
-  { key: "limbo, label: "Limbo" },
   { key: "z", label: "Sandbox" },
   { key: "2", label: "2TDM" },
   { key: "2b", label: "2 Teams Soccer" },
