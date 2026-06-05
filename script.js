@@ -459,11 +459,13 @@ async function fetchAndDisplay() {
 
     let jsonServerLogs = null;
     try {
-      const resServerLogs = await fetch(LOGS_URL());
-      if (resServerLogs.ok) {
-        const arrayServerLogs = await resServerLogs.json();
-        jsonServerLogs = logsArrayToJson(arrayServerLogs);
-      }
+      // Uncomment LOGS_URL definition if needed, or keep as is (original had it commented)
+      // const LOGS_URL = () => "https://verify-dev.glitch.me/api/server-data/array?timestamp=" + new Date(Date.now() - 10800e3).toISOString();
+      // const resServerLogs = await fetch(LOGS_URL());
+      // if (resServerLogs.ok) {
+      //   const arrayServerLogs = await resServerLogs.json();
+      //   jsonServerLogs = logsArrayToJson(arrayServerLogs);
+      // }
     } catch (logError) {
       console.warn("Failed to fetch server logs:", logError);
     }
@@ -497,33 +499,30 @@ async function fetchAndDisplay() {
       }
     });
 
-    const serverGrid = document.getElementById("server-grid");
-    if (serverGrid) serverGrid.innerHTML = "";
-
-    onlineServers.forEach((server) => {
-      
-      const mspt = server.mspt || 0;
-      const players = server.clients || 0;
-      
-      const dot = document.createElement("div");
-      dot.className = "server-dot";
-      
-      if (mspt >= 30) {
-        dot.classList.add("bad");
-      } else if (mspt >= 15) {
-        dot.classList.add("medium");
+    // ========== NEW: Server Health Grid ==========
+    const healthGrid = document.getElementById("serverHealthGrid");
+    if (healthGrid) {
+      if (onlineServers.length === 0) {
+        healthGrid.innerHTML = '<div class="grid-placeholder">No servers online</div>';
       } else {
-        dot.classList.add("good");
+        healthGrid.innerHTML = "";
+        onlineServers.forEach((server) => {
+          const mspt = server.mspt || 0;
+          const players = server.clients || 0;
+          const dot = document.createElement("div");
+          dot.className = "server-dot";
+          if (mspt >= 30) dot.classList.add("bad");
+          else if (mspt >= 15) dot.classList.add("medium");
+          else dot.classList.add("good");
+          dot.setAttribute("data-tooltip", `${server.name || 'Unknown'} | ${players} players | ${mspt.toFixed(1)} mspt`);
+          const size = 12 + Math.min(players, 24);
+          dot.style.width = `${size}px`;
+          dot.style.height = `${size}px`;
+          healthGrid.appendChild(dot);
+        });
       }
-      
-      dot.setAttribute("data-tooltip", `${server.name || 'Unknown'} | ${players} players | ${mspt.toFixed(1)} mspt`);
-      
-      const size = 12 + Math.min(players * 2, 12);
-      dot.style.width = `${size}px`;
-      dot.style.height = `${size}px`;
-      
-      if (serverGrid) serverGrid.appendChild(dot);
-    });
+    }
+    // ========== END NEW SECTION ==========
 
     onlineServers.forEach((server) => {
       if (!server) return;
@@ -542,7 +541,7 @@ async function fetchAndDisplay() {
       row.setAttribute("data-region", region.toLowerCase());
       row.setAttribute("data-players", server.clients || 0);
       row.innerHTML = `
-        <td><a href="https://arras.io/#${
+        <tr><a href="https://arras.io/#${
           server.name || ''
         }" class="server-redirect"><i class="fas fa-server"></i> #${server.name || '?'}</a></td>
         <td><i class="fas fa-users"></i> ${server.clients || 0} ${
@@ -569,12 +568,6 @@ async function fetchAndDisplay() {
     if (lastUpdatedElement) {
       lastUpdatedElement.innerHTML = 
         `<i class="fas fa-clock"></i> Last updated: ${new Date().toLocaleTimeString()}`;
-    }
-    
-    const activeServersElement = document.getElementById("active-servers");
-    if (activeServersElement) {
-      activeServersElement.innerHTML = 
-        `<i class="fas fa-server"></i> ${onlineServers.length}`;
     }
     
     filterTable();
@@ -624,6 +617,30 @@ document.addEventListener('DOMContentLoaded', function() {
     searchInput.addEventListener("input", function(e) {
       filterTable();
     });
+  }
+
+  // ========== NEW: Toggle Health Grid ==========
+  const toggleBtn = document.getElementById("toggleHealthGridBtn");
+  const gridContainer = document.getElementById("serverHealthGridContainer");
+  if (toggleBtn && gridContainer) {
+    toggleBtn.addEventListener("click", () => {
+      const isHidden = gridContainer.classList.toggle("hidden");
+      toggleBtn.textContent = isHidden ? "🗔 Show Grid" : "🗔 Hide Grid";
+    });
+  }
+
+// darkmode function bruh
+  const darkToggle = document.getElementById("darkModeToggle");
+  if (darkToggle) {
+    const isDark = localStorage.getItem("darkMode") === "true";
+    if (isDark) document.body.classList.add("dark-mode");
+    darkToggle.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      const nowDark = document.body.classList.contains("dark-mode");
+      localStorage.setItem("darkMode", nowDark);
+      darkToggle.innerHTML = nowDark ? '<i class="fas fa-sun"></i> Light' : '<i class="fas fa-moon"></i> Dark';
+    });
+    darkToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light' : '<i class="fas fa-moon"></i> Dark';
   }
 
   fetchAndDisplay();
