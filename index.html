@@ -8,7 +8,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="icon" href="https://cdn.glitch.global/1dbdb179-828e-46cf-a3b7-a9a4f8a3ee95/cuh.PNG?v=1750520454094" type="image/x-icon" />
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   </head>
   <body>
     <header>
@@ -98,6 +99,20 @@
       </div>
     </div>
 
+    <!-- server grid -->
+    <div id="healthGridSection" class="health-section">
+      <div class="health-header">
+        <h5><i class="fas fa-heartbeat"></i> Server Health Grid (MSPT performance)</h5>
+        <button id="toggleHealthGridBtn" class="toggle-grid-btn">🗔 Hide Grid</button>
+      </div>
+      <div id="serverHealthGridContainer" class="health-grid-container">
+        <div id="serverHealthGrid" class="server-health-grid">
+          <div class="grid-placeholder">Loading servers...</div>
+        </div>
+        <p class="grid-note">Ok so how this works is that higher MSPT values are represented by red dots, while lower values are shown as green dots,<br> the dot's size represents the amount of players in the server (it'll take a while to display every server here)</p>
+      </div>
+    </div>
+
     <div id="stats">
       <p><span id="total-players">Total Players: 0</span></p>
       <span id="last-updated">Last updated: —</span>
@@ -133,10 +148,14 @@
 
     <footer>
       <p>
-        © 2026 Arras.io Monitor • Made by Trapper and Testing, inspired by Testing's
+        © 2026 arras.io server table • Made by Trapper and Testing, inspired by Testing's
         <a href="https://somber-basalt-stock.glitch.me/special/sandboxes3.html" id="originalLink">Sandbox Viewer 3.0</a>
       </p>
     </footer>
+
+    <!-- Dark mode toggle button (also added back :p) -->
+    <button id="darkModeToggle" class="dark-mode-float" aria-label="Dark Mode"><i class="fas fa-moon"></i> Dark</button>
+
     <script src="script.js"></script>
   </body>
 </html>
