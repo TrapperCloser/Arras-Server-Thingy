@@ -1,4 +1,4 @@
-const API_URL = "qrp6ujau11f36bnm-c.uvwx.xyz:8443/2222/status";
+const API_URL = "https://qrp6ujau11f36bnm-c.uvwx.xyz:8443/2222/status";
 /*const LOGS_URL = () =>
   "https://verify-dev.glitch.me/api/server-data/array?timestamp=" +
   new Date(Date.now() - 10800e3).toISOString(); */
