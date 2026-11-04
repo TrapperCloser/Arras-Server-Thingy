@@ -1,4 +1,4 @@
-const API_URL = "http://gdeudh7c-c.uvwx.xyz:8443/5103/status";
+const API_URL = "http://gdeudh7c-c.uvwx.xyz:8443/5103";
 /*const LOGS_URL = () =>
   "https://verify-dev.glitch.me/api/server-data/array?timestamp=" +
   new Date(Date.now() - 10800e3).toISOString(); */
