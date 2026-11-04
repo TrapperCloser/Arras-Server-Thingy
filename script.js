@@ -1,4 +1,4 @@
-const API_URL = "https://gdeudh7c-c.uvwx.xyz:8443/5103/status";
+const API_URL = "https://qe38n42f-c.uvwx.xyz:8443/2222/status";
 
 /*const LOGS_URL = () =>
   "https://verify-dev.glitch.me/api/server-data/array?timestamp=" +
